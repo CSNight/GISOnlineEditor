@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="NWDB">
+  <database-model serializer="dbm" rdbms="ORACLE" format-version="4.7">
+    <root id="1"/>
+    <schema id="2" parent="1" name="NWSYS">
+      <ObjectId>88</ObjectId>
+      <IntrospectionTimestamp>2018-03-12.22:33:21</IntrospectionTimestamp>
+      <CreatedTimestamp>2017-11-22.04:37:15</CreatedTimestamp>
+      <ModifiedTimestamp>2017-12-18.22:58:15</ModifiedTimestamp>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="PUBLIC">
+      <ObjectId>1</ObjectId>
+    </schema>
+    <schema id="4" parent="1" name="SYS">
+      <ObjectId>0</ObjectId>
+    </schema>
+    <schema id="5" parent="1" name="SYSTEM">
+      <ObjectId>5</ObjectId>
+    </schema>
+    <schema id="6" parent="1" name="OUTLN">
+      <ObjectId>9</ObjectId>
+    </schema>
+    <schema id="7" parent="1" name="DIP">
+      <ObjectId>14</ObjectId>
+    </schema>
+    <schema id="8" parent="1" name="ORACLE_OCM">
+      <ObjectId>21</ObjectId>
+    </schema>
+    <schema id="9" parent="1" name="DBSNMP">
+      <ObjectId>30</ObjectId>
+    </schema>
+    <schema id="10" parent="1" name="APPQOSSYS">
+      <ObjectId>31</ObjectId>
+    </schema>
+    <schema id="11" parent="1" name="WMSYS">
+      <ObjectId>32</ObjectId>
+    </schema>
+    <schema id="12" parent="1" name="EXFSYS">
+      <ObjectId>42</ObjectId>
+    </schema>
+    <schema id="13" parent="1" name="CTXSYS">
+      <ObjectId>43</ObjectId>
+    </schema>
+    <schema id="14" parent="1" name="XDB">
+      <ObjectId>45</ObjectId>
+    </schema>
+    <schema id="15" parent="1" name="ANONYMOUS">
+      <ObjectId>46</ObjectId>
+    </schema>
+    <schema id="16" parent="1" name="ORDSYS">
+      <ObjectId>53</ObjectId>
+    </schema>
+    <schema id="17" parent="1" name="ORDDATA">
+      <ObjectId>54</ObjectId>
+    </schema>
+    <schema id="18" parent="1" name="ORDPLUGINS">
+      <ObjectId>55</ObjectId>
+    </schema>
+    <schema id="19" parent="1" name="SI_INFORMTN_SCHEMA">
+      <ObjectId>56</ObjectId>
+    </schema>
+    <schema id="20" parent="1" name="MDSYS">
+      <ObjectId>57</ObjectId>
+    </schema>
+    <schema id="21" parent="1" name="OLAPSYS">
+      <ObjectId>61</ObjectId>
+    </schema>
+    <schema id="22" parent="1" name="MDDATA">
+      <ObjectId>65</ObjectId>
+    </schema>
+    <schema id="23" parent="1" name="SPATIAL_WFS_ADMIN_USR">
+      <ObjectId>67</ObjectId>
+    </schema>
+    <schema id="24" parent="1" name="SPATIAL_CSW_ADMIN_USR">
+      <ObjectId>70</ObjectId>
+    </schema>
+    <schema id="25" parent="1" name="SYSMAN">
+      <ObjectId>72</ObjectId>
+    </schema>
+    <schema id="26" parent="1" name="MGMT_VIEW">
+      <ObjectId>74</ObjectId>
+    </schema>
+    <schema id="27" parent="1" name="FLOWS_FILES">
+      <ObjectId>75</ObjectId>
+    </schema>
+    <schema id="28" parent="1" name="APEX_PUBLIC_USER">
+      <ObjectId>76</ObjectId>
+    </schema>
+    <schema id="29" parent="1" name="APEX_030200">
+      <ObjectId>78</ObjectId>
+    </schema>
+    <schema id="30" parent="1" name="OWBSYS">
+      <ObjectId>79</ObjectId>
+    </schema>
+    <schema id="31" parent="1" name="OWBSYS_AUDIT">
+      <ObjectId>83</ObjectId>
+    </schema>
+    <schema id="32" parent="1" name="SCOTT">
+      <ObjectId>84</ObjectId>
+    </schema>
+    <schema id="33" parent="1" name="JSJT_SYS_ADMIN">
+      <ObjectId>85</ObjectId>
+    </schema>
+    <schema id="34" parent="1" name="SHIPSYS">
+      <ObjectId>86</ObjectId>
+    </schema>
+    <schema id="35" parent="1" name="JKYSYS">
+      <ObjectId>87</ObjectId>
+    </schema>
+    <schema id="36" parent="1" name="SASYS">
+      <ObjectId>89</ObjectId>
+    </schema>
+    <schema id="37" parent="1" name="XS$NULL">
+      <ObjectId>2147483638</ObjectId>
+    </schema>
+    <table id="38" parent="2" name="BLOCKCHAIN">
+      <ObjectId>73999</ObjectId>
+      <CreatedTimestamp>2017-12-03.07:50:50</CreatedTimestamp>
+      <ModifiedTimestamp>2017-12-03.22:02:20</ModifiedTimestamp>
+      <TemporaryPreserve>1</TemporaryPreserve>
+    </table>
+    <table id="39" parent="2" name="FEATUREOPLOG">
+      <ObjectId>74783</ObjectId>
+      <CreatedTimestamp>2017-12-15.18:35:19</CreatedTimestamp>
+      <ModifiedTimestamp>2017-12-18.22:58:15</ModifiedTimestamp>
+      <TemporaryPreserve>1</TemporaryPreserve>
+    </table>
+    <table id="40" parent="2" name="NW_BOOKSTORE">
+      <ObjectId>73849</ObjectId>
+      <CreatedTimestamp>2017-11-22.04:37:15</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-22.04:37:15</ModifiedTimestamp>
+      <TemporaryPreserve>1</TemporaryPreserve>
+    </table>
+    <column id="41" parent="38" name="BLOCKHASH">
+      <Position>1</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="42" parent="38" name="BLOCKINDEX">
+      <Position>2</Position>
+      <DataType>NUMBER(*)|0</DataType>
+    </column>
+    <column id="43" parent="38" name="TIMESTAMP">
+      <Position>3</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+      <DefaultExpression>NULL</DefaultExpression>
+    </column>
+    <column id="44" parent="38" name="BLOCK">
+      <Position>4</Position>
+      <DataType>BLOB|0</DataType>
+    </column>
+    <column id="45" parent="38" name="PREVIOUSHASH">
+      <Position>5</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <index id="46" parent="38" name="SYS_C0011258">
+      <ObjectId>74002</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-12-03.07:50:50</CreatedTimestamp>
+      <ModifiedTimestamp>2017-12-03.07:50:50</ModifiedTimestamp>
+      <TablespaceName>NETWORM</TablespaceName>
+      <ColNames>BLOCKHASH</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="47" parent="38" name="SYS_C0011258">
+      <NameSurrogate>1</NameSurrogate>
+      <ModifiedTimestamp>2017-12-03.07:50:50</ModifiedTimestamp>
+      <ColNames>BLOCKHASH</ColNames>
+      <InitiallyDeferred>1</InitiallyDeferred>
+      <UnderlyingIndexName>SYS_C0011258</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="48" parent="39" name="ID">
+      <Position>1</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="49" parent="39" name="OPERATIONTIME">
+      <Position>2</Position>
+      <DataType>TIMESTAMP(6)|0</DataType>
+      <DefaultExpression>NULL</DefaultExpression>
+    </column>
+    <column id="50" parent="39" name="OPROLE">
+      <Position>3</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="51" parent="39" name="OPSERVER">
+      <Position>4</Position>
+      <DataType>VARCHAR2(200)|0</DataType>
+      <DefaultExpression>NULL</DefaultExpression>
+    </column>
+    <column id="52" parent="39" name="OPWORKSPACE">
+      <Position>5</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="53" parent="39" name="OPDATASOURCE">
+      <Position>6</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="54" parent="39" name="OPDATASET">
+      <Position>7</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="55" parent="39" name="OPFEATUREID">
+      <Position>8</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="56" parent="39" name="OLD_OPINFO">
+      <Position>9</Position>
+      <DataType>BLOB|0</DataType>
+    </column>
+    <column id="57" parent="39" name="NEW_OPINFO">
+      <Position>10</Position>
+      <DataType>BLOB|0</DataType>
+    </column>
+    <column id="58" parent="39" name="OP_TYPE">
+      <Position>11</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="59" parent="40" name="ID">
+      <Position>1</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="60" parent="40" name="BOOKNAME">
+      <Position>2</Position>
+      <DataType>VARCHAR2(100)|0</DataType>
+    </column>
+    <column id="61" parent="40" name="DOWNLOADURL">
+      <Position>3</Position>
+      <DataType>VARCHAR2(200)|0</DataType>
+    </column>
+    <column id="62" parent="40" name="CHPCOUNT">
+      <Position>4</Position>
+      <DataType>NUMBER(*)|0</DataType>
+    </column>
+    <column id="63" parent="40" name="CREATETIME">
+      <Position>5</Position>
+      <DataType>DATE|0</DataType>
+    </column>
+    <column id="64" parent="40" name="BOOKBLOB">
+      <Position>6</Position>
+      <DataType>BLOB|0</DataType>
+    </column>
+    <column id="65" parent="40" name="BOOKSIZE">
+      <Position>7</Position>
+      <DataType>NUMBER(*)|0</DataType>
+    </column>
+    <index id="66" parent="40" name="PK_ID">
+      <ObjectId>73852</ObjectId>
+      <CreatedTimestamp>2017-11-22.04:37:15</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-22.04:37:15</ModifiedTimestamp>
+      <TablespaceName>NETWORM</TablespaceName>
+      <ColNames>ID</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="67" parent="40" name="PK_ID">
+      <ModifiedTimestamp>2017-11-22.04:37:15</ModifiedTimestamp>
+      <ColNames>ID</ColNames>
+      <InitiallyDeferred>1</InitiallyDeferred>
+      <UnderlyingIndexName>PK_ID</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>

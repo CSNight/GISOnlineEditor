@@ -1,0 +1,31 @@
+<component name="libraryTable">
+  <library name="IServerEx Library">
+    <CLASSES>
+      <root url="jar://D:/Software/SuperMap/IServer9D/lib/servlet-api.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-beanutils-1.9.3.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-codec-1.10.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-collections-3.2.2.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-collections4-4.1.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-lang-2.6.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/commons-utils-ugc-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/dom4j-1.6.1.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/ezmorph-1.0.6.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/iserver-all-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/json-lib-2.4-jdk15.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/ojdbc14-10.2.0.4.0.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/poi-3.16.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/poi-ooxml-3.16.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/poi-ooxml-schemas-3.16.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/rest-sdk-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/server-host-model-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/server-hosts-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/service-model-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/xmlbeans-2.6.0.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/com.supermap.data-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/com.supermap.analyst.spatialanalyst-9.0.0-15319.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

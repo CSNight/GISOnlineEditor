@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configration>
+    <iserver-metadata>
+        <server>localhost</server>
+        <port>8090</port>
+        <user>admin</user>
+        <password>Qnyh1991</password>
+    </iserver-metadata>
+    <datasource>
+        <driver>
+            oracle.jdbc.driver.OracleDriver
+        </driver>
+        <jdbcurl>
+            jdbc:oracle:thin:@localhost:1521:OCDB
+        </jdbcurl>
+        <user>NWSYS</user>
+        <password>NW123456</password>
+    </datasource>
+    <workspaces>
+    </workspaces>
+</configration>
