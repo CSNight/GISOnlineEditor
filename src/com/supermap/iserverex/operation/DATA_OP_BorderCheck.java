@@ -1,4 +1,4 @@
-package com.supermap.iserverex.dataop;
+package com.supermap.iserverex.operation;
 
 import com.supermap.data.*;
 import com.supermap.data.topology.TopologyValidator;
@@ -10,7 +10,7 @@ import net.sf.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BorderCheckModify {
+public class DATA_OP_BorderCheck {
     public static String BorderConfilctDetect(DatasetVector dv) {
         Workspace ws = dv.getDatasource().getWorkspace();
         Datasource ds = dv.getDatasource();
@@ -52,7 +52,7 @@ public class BorderCheckModify {
             List<GeoRegion> geoRegionList = new ArrayList<>();
             RegionDecompose(geoRegionList, geoRegion);
             for (GeoRegion gr : geoRegionList) {
-                JSONObject joFeat=new JSONObject();
+                JSONObject joFeat = new JSONObject();
                 JSONArray jsonArray = new JSONArray();
                 for (int i = 0; i < gr.getPartCount(); i++) {
                     Point2Ds grPart = gr.getPart(i);
@@ -60,12 +60,12 @@ public class BorderCheckModify {
                         jsonArray.add(new double[]{grPart.getItem(j).getX(), grPart.getItem(j).y});
                     }
                 }
-                joFeat.element("Geometry",jsonArray);
-                JSONObject joFields=new JSONObject();
-                joFields.element("BelongsA",rs.getFieldValue("ErrorObjectID1"));
-                joFields.element("BelongsB",rs.getFieldValue("ErrorObjectID2"));
-                joFields.element("BelongsFeatID","");
-                joFeat.element("Fields",joFields);
+                joFeat.element("Geometry", jsonArray);
+                JSONObject joFields = new JSONObject();
+                joFields.element("BelongsA", rs.getFieldValue("ErrorObjectID1"));
+                joFields.element("BelongsB", rs.getFieldValue("ErrorObjectID2"));
+                joFields.element("BelongsFeatID", "");
+                joFeat.element("Fields", joFields);
                 joFeatArray.add(joFeat);
             }
             rs.moveNext();

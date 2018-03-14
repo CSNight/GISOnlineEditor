@@ -1,6 +1,6 @@
-package com.supermap.iserverex.dblog;
+package com.supermap.iserverex.logmanage;
 
-public class FeatureOpLogWithBLOBs extends FeatureOpLog {
+public class DB_LOG_FeatureLogWithBLOBs extends DB_LOG_FeatureLog {
     private byte[] OLD_OPINFO;
 
     private byte[] NEW_OPINFO;

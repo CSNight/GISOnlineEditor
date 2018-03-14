@@ -1,12 +1,12 @@
-package com.supermap.iserverex.editserver;
+package com.supermap.iserverex.edit_server;
 
 import com.supermap.data.DatasetVector;
 import com.supermap.data.Datasource;
 import com.supermap.data.Workspace;
-import com.supermap.iserverex.dataop.BorderCheckModify;
-import com.supermap.iserverex.dataop.DataPrepare;
-import com.supermap.iserverex.dataop.DatasetHelper;
-import com.supermap.iserverex.dblog.DBLogQuery;
+import com.supermap.iserverex.logmanage.DB_LOG_LogQuery;
+import com.supermap.iserverex.operation.DATA_OP_BorderCheck;
+import com.supermap.iserverex.operation.DATA_OP_DataModify;
+import com.supermap.iserverex.operation.DATA_OP_DataPrepare;
 import com.supermap.iserverex.utils.ConfigReader;
 import com.supermap.iserverex.utils.RestfulAPIRequest;
 import com.supermap.services.components.spi.ProviderContext;
@@ -37,11 +37,11 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
         try {
             Workspace workspace = getWorkspace(ServerName);
             DatasetVector dv = getDatasetVector(workspace, DatasetName);
-            DataPrepare dp = new DataPrepare();
+            DATA_OP_DataPrepare dp = new DATA_OP_DataPrepare();
             Map<String, String> meta = dp.DataDispatch(Features);
             List<Map<Object, Map<String, Object>>> info = dp.datainsertBuild(
                     meta.get("Features"), meta.get("FeatureType"));
-            DatasetHelper dsh = new DatasetHelper();
+            DATA_OP_DataModify dsh = new DATA_OP_DataModify();
             String result = dsh.addFeature(dv, meta, info, ServerName,
                     DatasetName);
             workspace.save();
@@ -59,12 +59,12 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
         try {
             Workspace workspace = getWorkspace(ServerName);
             DatasetVector dv = getDatasetVector(workspace, DatasetName);
-            DataPrepare dp = new DataPrepare();
+            DATA_OP_DataPrepare dp = new DATA_OP_DataPrepare();
             Map<String, String> meta = dp.DataDispatch(Features);
             Map<String, Map<Object, Map<String, Object>>> info = dp
                     .dataupdateBuild(meta.get("Features"),
                             meta.get("FeatureType"));
-            DatasetHelper dsh = new DatasetHelper();
+            DATA_OP_DataModify dsh = new DATA_OP_DataModify();
             String result = dsh.updateFeature(dv, meta, info, ServerName,
                     DatasetName);
             workspace.save();
@@ -82,10 +82,10 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
         try {
             Workspace workspace = getWorkspace(ServerName);
             DatasetVector dv = getDatasetVector(workspace, DatasetName);
-            DataPrepare dp = new DataPrepare();
+            DATA_OP_DataPrepare dp = new DATA_OP_DataPrepare();
             Map<String, String> meta = dp.DataDispatch(Features);
             List<String> info = dp.datadeleteBuild(meta.get("Features"));
-            DatasetHelper dsh = new DatasetHelper();
+            DATA_OP_DataModify dsh = new DATA_OP_DataModify();
             String result = dsh.deleteFeature(dv, meta, info, ServerName,
                     DatasetName);
             workspace.save();
@@ -124,7 +124,7 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
                 Info = rareq.GetDataServerProvider(ServerName);
                 workspace = WorkspaceContainer.get(
                         WorkspaceConnectionInfo.parse(Info), this);
-                Map<String, String> workspaceinfo = new HashMap<String, String>();
+                Map<String, String> workspaceinfo = new HashMap<>();
                 workspaceinfo.put("workspace", ServerName);
                 workspaceinfo.put("info", Info);
                 ConfigReader.XmlWorksapceInfoSaver(workspaceinfo);
@@ -136,7 +136,7 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
             Info = rareq.GetDataServerProvider(ServerName);
             workspace = WorkspaceContainer.get(
                     WorkspaceConnectionInfo.parse(Info), this);
-            Map<String, String> workspaceinfo = new HashMap<String, String>();
+            Map<String, String> workspaceinfo = new HashMap<>();
             workspaceinfo.put("workspace", ServerName);
             workspaceinfo.put("info", Info);
             ConfigReader.XmlWorksapceInfoSaver(workspaceinfo);
@@ -147,7 +147,7 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
     @Override
     public String QueryByDataset(String DatasetName) {
         // TODO Auto-generated method stub
-        DBLogQuery dblog = new DBLogQuery();
+        DB_LOG_LogQuery dblog = new DB_LOG_LogQuery();
         return dblog.QueryBySet(DatasetName);
 
     }
@@ -155,7 +155,7 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
     @Override
     public String QueryByIDAndSet(String FeatureID, String DatasetName) {
         // TODO Auto-generated method stub
-        DBLogQuery dblog = new DBLogQuery();
+        DB_LOG_LogQuery dblog = new DB_LOG_LogQuery();
         return dblog.QueryByID(FeatureID, DatasetName);
     }
 
@@ -163,6 +163,6 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
     public String BorderConflictCheck(String ServerName, String DatasetName) {
         Workspace workspace = getWorkspace(ServerName);
         DatasetVector dv = getDatasetVector(workspace, DatasetName);
-        return BorderCheckModify.BorderConfilctDetect(dv);
+        return DATA_OP_BorderCheck.BorderConfilctDetect(dv);
     }
 }

@@ -1,11 +1,11 @@
-package com.supermap.iserverex.dataop;
+package com.supermap.iserverex.operation;
 
 import com.supermap.analyst.spatialanalyst.OverlayAnalyst;
 import com.supermap.analyst.spatialanalyst.OverlayAnalystParameter;
 import com.supermap.data.*;
 import com.supermap.data.topology.TopologyValidator;
 
-public class BorderAutoBuild {
+public class DATA_OP_BorderAutoBuild {
     public static GeoRegion BorderFix(GeoRegion geoRegion, DatasetVector dv) {
         Workspace ws = dv.getDatasource().getWorkspace();
         Datasource ds = dv.getDatasource();
@@ -40,7 +40,7 @@ public class BorderAutoBuild {
             ds.getDatasets().delete(resultDatasetName);
             ws.save();
             return region;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

@@ -1,4 +1,4 @@
-package com.supermap.iserverex.editserver;
+package com.supermap.iserverex.edit_server;
 
 public interface OnlineEditor {
     String InsertFeature(String jsonElements, String paramType);

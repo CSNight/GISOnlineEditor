@@ -1,8 +1,8 @@
-package com.supermap.iserverex.dataop;
+package com.supermap.iserverex.operation;
 
 import com.supermap.data.*;
-import com.supermap.iserverex.dblog.FeatureOpLogWithBLOBs;
-import com.supermap.iserverex.dblog.OpLogHelper;
+import com.supermap.iserverex.logmanage.DB_LOG_FeatureLogWithBLOBs;
+import com.supermap.iserverex.logmanage.DB_LOG_Handler;
 import com.supermap.iserverex.utils.GUID;
 import com.supermap.iserverex.utils.JSONUtil;
 import com.supermap.iserverex.utils.ResultMsg;
@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class DatasetHelper {
+public class DATA_OP_DataModify {
 
     public String addFeature(DatasetVector dv, Map<String, String> meta,
                              List<Map<Object, Map<String, Object>>> infos, String ServerName,
@@ -39,16 +39,16 @@ public class DatasetHelper {
                 if (meta.get("FeatureType").equals("Region")) {
                     Map<Object, Map<String, Object>> feature = infos.get(i);
                     Object geo = feature.keySet().toArray()[0];
-                    GeoRegion new_geo=BorderAutoBuild.TopLayerBorderOverlapFix((GeoRegion)geo,dv,TopClassDatasetName);
-                    boolean addres=false;
-                    if(new_geo!=null){
-                        addres = rs.addNew( new_geo, feature.get(geo));
-                    }else{
-                        addres = rs.addNew((GeoRegion)geo, feature.get(geo));
+                    GeoRegion new_geo = DATA_OP_BorderAutoBuild.TopLayerBorderOverlapFix((GeoRegion) geo, dv, TopClassDatasetName);
+                    boolean addres = false;
+                    if (new_geo != null) {
+                        addres = rs.addNew(new_geo, feature.get(geo));
+                    } else {
+                        addres = rs.addNew((GeoRegion) geo, feature.get(geo));
                     }
                     rs.update();
                     rs.edit();
-                    rs.setGeometry(BorderAutoBuild.BorderFix((GeoRegion)geo,dv));
+                    rs.setGeometry(DATA_OP_BorderAutoBuild.BorderFix((GeoRegion) geo, dv));
                     rs.update();
                     meta.put("featureid", rs.getID() + "");
                     byte[] new_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), rs.getID());
@@ -109,17 +109,17 @@ public class DatasetHelper {
                     if (rs.seekID(FeatID)) {
                         byte[] old_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), FeatID);
                         rs.edit();
-                        GeoRegion new_geo=BorderAutoBuild.TopLayerBorderOverlapFix((GeoRegion)geo,dv,TopClassDatasetName);
-                        if(new_geo!=null){
+                        GeoRegion new_geo = DATA_OP_BorderAutoBuild.TopLayerBorderOverlapFix((GeoRegion) geo, dv, TopClassDatasetName);
+                        if (new_geo != null) {
                             rs.setGeometry(new_geo);
-                        }else{
-                            rs.setGeometry((GeoRegion)geo);
+                        } else {
+                            rs.setGeometry((GeoRegion) geo);
                         }
                         rs.setValues(feature.get(geo));
                         rs.update();
                         rs.edit();
-                        rs.setGeometry(BorderAutoBuild.BorderFix((GeoRegion)geo,dv));
-                        boolean updateres =rs.update();
+                        rs.setGeometry(DATA_OP_BorderAutoBuild.BorderFix((GeoRegion) geo, dv));
+                        boolean updateres = rs.update();
                         meta.put("featureid", FeatID + "");
                         byte[] new_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), FeatID);
                         oplogbuild(meta, old_f, new_f);
@@ -212,10 +212,10 @@ public class DatasetHelper {
     }
 
     private void oplogbuild(Map<String, String> meta, byte[] old_f, byte[] new_f) {
-        OpLogHelper op = new OpLogHelper();
+        DB_LOG_Handler op = new DB_LOG_Handler();
         try {
-            List<FeatureOpLogWithBLOBs> oplogs = new ArrayList<>();
-            FeatureOpLogWithBLOBs oplog = new FeatureOpLogWithBLOBs();
+            List<DB_LOG_FeatureLogWithBLOBs> oplogs = new ArrayList<>();
+            DB_LOG_FeatureLogWithBLOBs oplog = new DB_LOG_FeatureLogWithBLOBs();
             oplog.setID(GUID.getUUID());
             oplog.setOPERATIONTIME(new Date());
             oplog.setOPROLE(meta.get("EditRole"));

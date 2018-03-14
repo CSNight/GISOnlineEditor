@@ -1,4 +1,4 @@
-package com.supermap.iserverex.dataop;
+package com.supermap.iserverex.operation;
 
 import com.supermap.data.*;
 import com.supermap.iserverex.utils.JSONUtil;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DataPrepare {
+public class DATA_OP_DataPrepare {
 
     public Map<String, String> DataDispatch(String JSON) {
         JSONObject data = JSONObject.fromObject(JSON);
@@ -24,7 +24,7 @@ public class DataPrepare {
         return meta;
     }
 
-    public  List<Map<Object, Map<String, Object>>> datainsertBuild(
+    public List<Map<Object, Map<String, Object>>> datainsertBuild(
             String jsonElements, String geoType) {
         List<Map<Object, Map<String, Object>>> info = new ArrayList<>();
         try {

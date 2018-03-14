@@ -1,4 +1,4 @@
-package com.supermap.iserverex.editserver;
+package com.supermap.iserverex.edit_server;
 
 public interface OnlineEditorProvider {
     String insertFeature(String Features, String ServerName, String DatasetName);

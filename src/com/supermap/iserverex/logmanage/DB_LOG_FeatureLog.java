@@ -1,8 +1,8 @@
-package com.supermap.iserverex.dblog;
+package com.supermap.iserverex.logmanage;
 
 import java.util.Date;
 
-public class FeatureOpLog {
+public class DB_LOG_FeatureLog {
     private String ID;
 
     private Date OPERATIONTIME;

@@ -1,4 +1,4 @@
-package com.supermap.iserverex.editserver;
+package com.supermap.iserverex.address_server;
 
 import com.supermap.services.Interface;
 import com.supermap.services.InterfaceContext;
@@ -14,18 +14,14 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.List;
 
-@Interface(componentTypes = {OnlineEditor.class}, optional = false, multiple = false)
-public class OnlineEditorServlet extends HttpServlet implements
+@Interface(componentTypes = {OnlineGeocoding.class}, optional = false, multiple = false)
+public class OnlineGeocodingServlet extends HttpServlet implements
         InterfaceContextAware {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private String id;
-    private OnlineEditor onlineeditor = null;
+    private OnlineGeocoding onlinegeocoding = null;
 
-    public OnlineEditorServlet() {
+    public OnlineGeocodingServlet() {
         this.id = String.valueOf(System.currentTimeMillis());
     }
 
@@ -47,26 +43,6 @@ public class OnlineEditorServlet extends HttpServlet implements
             String paramType = data.get("ParamsType").toString();
             String jsonElements = data.get("Elements").toString();
             String ReponseStr = "";
-            switch (reqType) {
-                case "Add":
-                    ReponseStr = onlineeditor.InsertFeature(jsonElements, paramType);
-                    break;
-                case "Update":
-                    ReponseStr = onlineeditor.UpdateFeature(jsonElements, paramType);
-                    break;
-                case "Delete":
-                    ReponseStr = onlineeditor.DeleteFeature(jsonElements, paramType);
-                    break;
-                case "QueryByID":
-                    ReponseStr = onlineeditor.QueryByFeatureIDAndDataset(jsonElements, paramType);
-                    break;
-                case "QueryBySet":
-                    ReponseStr = onlineeditor.QueryByDatasetName(jsonElements, paramType);
-                    break;
-                case "BorderCheck":
-                    ReponseStr = onlineeditor.BorderConflictCheck(jsonElements, paramType);
-                    break;
-            }
             PrintWriter writer = response.getWriter();
             System.out.println(ReponseStr);
             writer.println(ReponseStr);
@@ -81,8 +57,8 @@ public class OnlineEditorServlet extends HttpServlet implements
         List<Object> components = context.getComponents(Object.class);
         if (components != null) {
             for (Object component : components) {
-                if (component instanceof OnlineEditor) {
-                    this.onlineeditor = (OnlineEditor) component;
+                if (component instanceof OnlineGeocoding) {
+                    this.onlinegeocoding = (OnlineGeocoding) component;
                     break;
                 }
             }

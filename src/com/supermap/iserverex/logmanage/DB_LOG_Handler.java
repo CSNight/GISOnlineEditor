@@ -1,4 +1,5 @@
-package com.supermap.iserverex.dblog;
+package com.supermap.iserverex.logmanage;
+
 
 import com.supermap.iserverex.utils.DBUtil;
 
@@ -6,11 +7,12 @@ import java.io.ByteArrayInputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class OpLogHelper {
-    public Connection conn = null;
+public class DB_LOG_Handler {
+    private Connection conn = null;
 
-    public OpLogHelper() {
+    public DB_LOG_Handler() {
         conn = DBUtil.getConn();
     }
 
@@ -18,7 +20,7 @@ public class OpLogHelper {
         DBUtil.close(conn);
     }
 
-    public int[] BatchInsert(List<FeatureOpLogWithBLOBs> oplogs) {
+    public int[] BatchInsert(List<DB_LOG_FeatureLogWithBLOBs> oplogs) {
         int[] results = null;
         PreparedStatement pstmt = null;
         String sql = "INSERT INTO FEATUREOPLOG";
@@ -26,7 +28,7 @@ public class OpLogHelper {
         sql += " values(?,?,?,?,?,?,?,?,?,?,?)";
         try {
             pstmt = conn.prepareStatement(sql);
-            for (FeatureOpLogWithBLOBs oplog : oplogs) {
+            for (DB_LOG_FeatureLogWithBLOBs oplog : oplogs) {
                 pstmt.setString(1, oplog.getID());
                 pstmt.setTimestamp(2, new Timestamp(oplog.getOPERATIONTIME()
                         .getTime()));
@@ -61,7 +63,7 @@ public class OpLogHelper {
 
     public void delete(String id) {
         PreparedStatement pstmt = null;
-        String sql = "delete from FEATUREOPLOG where id='?'";
+        String sql = "DELETE FROM FEATUREOPLOG WHERE id=?";
         try {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -75,7 +77,7 @@ public class OpLogHelper {
         }
     }
 
-    public int[] BatchUpdate(List<FeatureOpLogWithBLOBs> oplogs) {
+    public int[] BatchUpdate(List<DB_LOG_FeatureLogWithBLOBs> oplogs) {
         int[] results = null;
         PreparedStatement pstmt = null;
         String sql = "UPDATE FEATUREOPLOG ";
@@ -83,7 +85,7 @@ public class OpLogHelper {
         sql += "SET OPDATASET=?,SET OPFEATUREID=?,SET OLD_OPINFO=?,SET NEW_OPINFO=?,SET OP_TYPE=?)";
         try {
             pstmt = conn.prepareStatement(sql);
-            for (FeatureOpLogWithBLOBs oplog : oplogs) {
+            for (DB_LOG_FeatureLogWithBLOBs oplog : oplogs) {
                 pstmt.setString(1, oplog.getID());
                 pstmt.setTimestamp(2, new Timestamp(oplog.getOPERATIONTIME()
                         .getTime()));
@@ -111,18 +113,18 @@ public class OpLogHelper {
         return results;
     }
 
-    public List<FeatureOpLogWithBLOBs> queryall() {
+    public List<DB_LOG_FeatureLogWithBLOBs> queryall() {
         PreparedStatement pstmt = null;
         ResultSet resultSet = null;
-        String sql = "select * from FEATUREOPLOG ";
-        List<FeatureOpLogWithBLOBs> oplogList = new ArrayList<FeatureOpLogWithBLOBs>();
+        String sql = "SELECT * FROM FEATUREOPLOG ";
+        List<DB_LOG_FeatureLogWithBLOBs> oplogList = new ArrayList<>();
         try {
             pstmt = conn.prepareStatement(sql);
 
             resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
-                FeatureOpLogWithBLOBs oplog = new FeatureOpLogWithBLOBs();
+                DB_LOG_FeatureLogWithBLOBs oplog = new DB_LOG_FeatureLogWithBLOBs();
                 oplog.setID(resultSet.getString("ID"));
                 oplog.setOPERATIONTIME(resultSet.getTimestamp("OPERATIONTIME"));
                 oplog.setOPROLE(resultSet.getString("OPROLE"));
@@ -139,8 +141,8 @@ public class OpLogHelper {
                 if (nb != null) {
                     oplog.setNEW_OPINFO(nb.getBytes(1, (int) nb.length()));
                 }
-                oplog.setOLD_OPINFO(ob.getBytes(1, (int) ob.length()));
-                oplog.setNEW_OPINFO(nb.getBytes(1, (int) nb.length()));
+                oplog.setOLD_OPINFO(ob.getBytes(1, (int) Objects.requireNonNull(ob).length()));
+                oplog.setNEW_OPINFO(nb.getBytes(1, (int) Objects.requireNonNull(nb).length()));
                 oplog.setOP_TYPE(resultSet.getString("OP_TYPE"));
                 oplogList.add(oplog);
             }
@@ -153,15 +155,15 @@ public class OpLogHelper {
         return oplogList;
     }
 
-    public List<FeatureOpLogWithBLOBs> query(String sql) {
+    public List<DB_LOG_FeatureLogWithBLOBs> query(String sql) {
         PreparedStatement pstmt = null;
         ResultSet resultSet = null;
-        List<FeatureOpLogWithBLOBs> oplogList = new ArrayList<FeatureOpLogWithBLOBs>();
+        List<DB_LOG_FeatureLogWithBLOBs> oplogList = new ArrayList<>();
         try {
             pstmt = conn.prepareStatement(sql);
             resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
-                FeatureOpLogWithBLOBs oplog = new FeatureOpLogWithBLOBs();
+                DB_LOG_FeatureLogWithBLOBs oplog = new DB_LOG_FeatureLogWithBLOBs();
                 oplog.setID(resultSet.getString("ID"));
                 oplog.setOPERATIONTIME(resultSet.getTimestamp("OPERATIONTIME"));
                 oplog.setOPROLE(resultSet.getString("OPROLE"));

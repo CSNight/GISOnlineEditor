@@ -1,4 +1,4 @@
-package com.supermap.iserverex.editserver;
+package com.supermap.iserverex.edit_server;
 
 import com.supermap.services.components.Component;
 import com.supermap.services.components.ComponentContext;

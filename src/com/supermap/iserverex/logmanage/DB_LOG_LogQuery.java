@@ -1,4 +1,4 @@
-package com.supermap.iserverex.dblog;
+package com.supermap.iserverex.logmanage;
 
 import com.supermap.iserverex.utils.JSONUtil;
 import com.supermap.iserverex.utils.ResultMsg;
@@ -9,28 +9,28 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class DBLogQuery {
+public class DB_LOG_LogQuery {
     public String QueryBySet(String set) {
         ResultMsg res = new ResultMsg();
         try {
-            OpLogHelper op = new OpLogHelper();
+            DB_LOG_Handler op = new DB_LOG_Handler();
             String sql = "SELECT * FROM FEATUREOPLOG WHERE OPDATASET='" + set
                     + "' Order by OPERATIONTIME DESC";
-            List<FeatureOpLogWithBLOBs> result = op.query(sql);
+            List<DB_LOG_FeatureLogWithBLOBs> result = op.query(sql);
             JSONObject jolog = new JSONObject();
             JSONArray jologs = new JSONArray();
-            for (int i = 0; i < result.size(); i++) {
+            for (DB_LOG_FeatureLogWithBLOBs aResult : result) {
                 JSONObject jf = new JSONObject();
-                jf.element("FeatureID", result.get(i).getOPFEATUREID());
-                jf.element("OpRole", result.get(i).getOPROLE());
+                jf.element("FeatureID", aResult.getOPFEATUREID());
+                jf.element("OpRole", aResult.getOPROLE());
                 SimpleDateFormat formatter = new SimpleDateFormat(
                         "yyyy-MM-dd HH:mm:ss");
-                String time = formatter.format(result.get(i).getOPERATIONTIME()
+                String time = formatter.format(aResult.getOPERATIONTIME()
                         .getTime());
                 jf.element("OpTime", time);
-                jf.element("OpType", result.get(i).getOP_TYPE());
-                if (result.get(i).getOLD_OPINFO() != null) {
-                    byte[] old = (byte[]) result.get(i).getOLD_OPINFO();
+                jf.element("OpType", aResult.getOP_TYPE());
+                if (aResult.getOLD_OPINFO() != null) {
+                    byte[] old = aResult.getOLD_OPINFO();
                     String ress = "";
                     try {
                         ress = new String(old, "utf-8");
@@ -42,8 +42,8 @@ public class DBLogQuery {
                 } else {
                     jf.element("Feature_Old", "");
                 }
-                if (result.get(i).getNEW_OPINFO() != null) {
-                    byte[] ne = (byte[]) result.get(i).getNEW_OPINFO();
+                if (aResult.getNEW_OPINFO() != null) {
+                    byte[] ne = aResult.getNEW_OPINFO();
                     String ress = "";
                     try {
                         ress = new String(ne, "utf-8");
@@ -77,25 +77,25 @@ public class DBLogQuery {
     public String QueryByID(String id, String set) {
         ResultMsg res = new ResultMsg();
         try {
-            OpLogHelper op = new OpLogHelper();
+            DB_LOG_Handler op = new DB_LOG_Handler();
             String sql = "SELECT * FROM FEATUREOPLOG WHERE OPDATASET='" + set
                     + "' AND OPFEATUREID='" + id
                     + "' Order by OPERATIONTIME DESC";
-            List<FeatureOpLogWithBLOBs> result = op.query(sql);
+            List<DB_LOG_FeatureLogWithBLOBs> result = op.query(sql);
             JSONObject jolog = new JSONObject();
             JSONArray jologs = new JSONArray();
-            for (int i = 0; i < result.size(); i++) {
+            for (DB_LOG_FeatureLogWithBLOBs aResult : result) {
                 JSONObject jf = new JSONObject();
-                jf.element("FeatureID", result.get(i).getOPFEATUREID());
-                jf.element("OpRole", result.get(i).getOPROLE());
+                jf.element("FeatureID", aResult.getOPFEATUREID());
+                jf.element("OpRole", aResult.getOPROLE());
                 SimpleDateFormat formatter = new SimpleDateFormat(
                         "yyyy-MM-dd HH:mm:ss");
-                String time = formatter.format(result.get(i).getOPERATIONTIME()
+                String time = formatter.format(aResult.getOPERATIONTIME()
                         .getTime());
                 jf.element("OpTime", time);
-                jf.element("OpType", result.get(i).getOP_TYPE());
-                if (result.get(i).getOLD_OPINFO() != null) {
-                    byte[] old = (byte[]) result.get(i).getOLD_OPINFO();
+                jf.element("OpType", aResult.getOP_TYPE());
+                if (aResult.getOLD_OPINFO() != null) {
+                    byte[] old = aResult.getOLD_OPINFO();
                     String ress = "";
                     try {
                         ress = new String(old, "utf-8");
@@ -107,8 +107,8 @@ public class DBLogQuery {
                 } else {
                     jf.element("Feature_Old", "");
                 }
-                if (result.get(i).getNEW_OPINFO() != null) {
-                    byte[] ne = (byte[]) result.get(i).getNEW_OPINFO();
+                if (aResult.getNEW_OPINFO() != null) {
+                    byte[] ne = aResult.getNEW_OPINFO();
                     String ress = "";
                     try {
                         ress = new String(ne, "utf-8");
