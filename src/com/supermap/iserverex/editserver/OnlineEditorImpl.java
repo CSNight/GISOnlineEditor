@@ -102,7 +102,17 @@ public class OnlineEditorImpl implements OnlineEditor, ComponentContextAware {
 
     @Override
     public String BorderConflictCheck(String jsonElements, String paramType) {
-        return null;
+        String temp = null;
+        try {
+            // TODO Auto-generated method stub
+            JSONObject data = JSONObject.fromObject(jsonElements);
+            String ServerName = data.getString("DataServerName");
+            String DatasetName = data.getString("DataSet");
+            temp = onlineeditorProvider.BorderConflictCheck(ServerName, DatasetName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
     }
 
 }

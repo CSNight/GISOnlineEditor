@@ -3,6 +3,7 @@ package com.supermap.iserverex.editserver;
 import com.supermap.data.DatasetVector;
 import com.supermap.data.Datasource;
 import com.supermap.data.Workspace;
+import com.supermap.iserverex.dataop.BorderCheckModify;
 import com.supermap.iserverex.dataop.DataPrepare;
 import com.supermap.iserverex.dataop.DatasetHelper;
 import com.supermap.iserverex.dblog.DBLogQuery;
@@ -156,5 +157,12 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
         // TODO Auto-generated method stub
         DBLogQuery dblog = new DBLogQuery();
         return dblog.QueryByID(FeatureID, DatasetName);
+    }
+
+    @Override
+    public String BorderConflictCheck(String ServerName, String DatasetName) {
+        Workspace workspace = getWorkspace(ServerName);
+        DatasetVector dv = getDatasetVector(workspace, DatasetName);
+        return BorderCheckModify.BorderConfilctDetect(dv);
     }
 }
