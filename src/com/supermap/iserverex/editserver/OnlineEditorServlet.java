@@ -49,24 +49,22 @@ public class OnlineEditorServlet extends HttpServlet implements
             String ReponseStr = "";
             switch (reqType) {
                 case "Add":
-                    ReponseStr = onlineeditor
-                            .InsertFeature(jsonElements, paramType);
+                    ReponseStr = onlineeditor.InsertFeature(jsonElements, paramType);
                     break;
                 case "Update":
-                    ReponseStr = onlineeditor
-                            .UpdateFeature(jsonElements, paramType);
+                    ReponseStr = onlineeditor.UpdateFeature(jsonElements, paramType);
                     break;
                 case "Delete":
-                    ReponseStr = onlineeditor
-                            .DeleteFeature(jsonElements, paramType);
+                    ReponseStr = onlineeditor.DeleteFeature(jsonElements, paramType);
                     break;
                 case "QueryByID":
-                    ReponseStr = onlineeditor.QueryByFeatureIDAndDataset(
-                            jsonElements, paramType);
+                    ReponseStr = onlineeditor.QueryByFeatureIDAndDataset(jsonElements, paramType);
                     break;
                 case "QueryBySet":
-                    ReponseStr = onlineeditor.QueryByDatasetName(jsonElements,
-                            paramType);
+                    ReponseStr = onlineeditor.QueryByDatasetName(jsonElements, paramType);
+                    break;
+                case "BorderCheck":
+                    ReponseStr = onlineeditor.BorderConflictCheck(jsonElements, paramType);
                     break;
             }
             PrintWriter writer = response.getWriter();

@@ -33,25 +33,25 @@ public class DatasetHelper {
             meta.put("optype", "add");
             JSONObject jselements = new JSONObject();
             JSONArray jsastatus = new JSONArray();
-            JSONArray jsfs = JSONArray.fromObject(meta.get("Features"));
+            String TopClassDatasetName = meta.get("TopClassDatasetName");
             Recordset rs = dv.getRecordset(false, CursorType.DYNAMIC);
             for (int i = 0; i < infos.size(); i++) {
                 if (meta.get("FeatureType").equals("Region")) {
                     Map<Object, Map<String, Object>> feature = infos.get(i);
                     Object geo = feature.keySet().toArray()[0];
-                    boolean addres = rs.addNew((GeoRegion) geo,
-                            feature.get(geo));
+                    GeoRegion new_geo=BorderAutoBuild.TopLayerBorderOverlapFix((GeoRegion)geo,dv,TopClassDatasetName);
+                    boolean addres=false;
+                    if(new_geo!=null){
+                        addres = rs.addNew( new_geo, feature.get(geo));
+                    }else{
+                        addres = rs.addNew((GeoRegion)geo, feature.get(geo));
+                    }
+                    rs.update();
+                    rs.edit();
+                    rs.setGeometry(BorderAutoBuild.BorderFix((GeoRegion)geo,dv));
                     rs.update();
                     meta.put("featureid", rs.getID() + "");
-                    byte[] new_f = null;
-                    try {
-                        jsfs.getJSONObject(i).element("FeatureID",
-                                rs.getID() + "");
-                        new_f = jsfs.getJSONObject(i).toString()
-                                .getBytes("utf-8");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    byte[] new_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), rs.getID());
                     oplogbuild(meta, new byte[]{}, new_f);
                     if (addres) {
                         successcount++;
@@ -99,7 +99,7 @@ public class DatasetHelper {
             meta.put("optype", "update");
             JSONObject jselements = new JSONObject();
             JSONArray jsastatus = new JSONArray();
-            JSONArray jsfs = JSONArray.fromObject(meta.get("Features"));
+            String TopClassDatasetName = meta.get("TopClassDatasetName");
             Recordset rs = dv.getRecordset(false, CursorType.DYNAMIC);
             for (String key : new_info.keySet()) {
                 if (meta.get("FeatureType").equals("Region")) {
@@ -107,25 +107,21 @@ public class DatasetHelper {
                     Object geo = feature.keySet().toArray()[0];
                     int FeatID = Integer.parseInt(key);
                     if (rs.seekID(FeatID)) {
-                        byte[] old_f = featureTobyte(rs.getFeature(), feature
-                                .get(geo).keySet().toArray(), FeatID);
+                        byte[] old_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), FeatID);
                         rs.edit();
-                        rs.setGeometry((GeoRegion) geo);
-                        rs.setValues(feature.get(geo));
-                        boolean updateres = rs.update();
-                        meta.put("featureid", FeatID + "");
-                        byte[] new_f = null;
-                        try {
-                            for (int i = 0; i < jsfs.size(); i++) {
-                                if (jsfs.getJSONObject(i).get("FeatureID")
-                                        .toString().equals(key)) {
-                                    new_f = jsfs.getJSONObject(i).toString()
-                                            .getBytes("utf-8");
-                                }
-                            }
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                        GeoRegion new_geo=BorderAutoBuild.TopLayerBorderOverlapFix((GeoRegion)geo,dv,TopClassDatasetName);
+                        if(new_geo!=null){
+                            rs.setGeometry(new_geo);
+                        }else{
+                            rs.setGeometry((GeoRegion)geo);
                         }
+                        rs.setValues(feature.get(geo));
+                        rs.update();
+                        rs.edit();
+                        rs.setGeometry(BorderAutoBuild.BorderFix((GeoRegion)geo,dv));
+                        boolean updateres =rs.update();
+                        meta.put("featureid", FeatID + "");
+                        byte[] new_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), FeatID);
                         oplogbuild(meta, old_f, new_f);
                         if (updateres) {
 
@@ -254,9 +250,9 @@ public class DatasetHelper {
                     jsageo.element(jsp);
                 }
             }
-            for (int i = 0; i < fields.length; i++) {
-                jsf.element(fields[i].toString(),
-                        feat.getValue(fields[i].toString()));
+            for (Object field : fields) {
+                jsf.element(field.toString(),
+                        feat.getValue(field.toString()));
             }
             jso.element("FeatureID", ID);
             jso.element("Geometry", jsageo);

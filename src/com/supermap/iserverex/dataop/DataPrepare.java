@@ -18,6 +18,8 @@ public class DataPrepare {
         meta.put("FeatureType", data.get("FeatureType").toString());
         meta.put("EditRole", data.get("EditRole").toString());
         meta.put("BelongsOrg", data.get("BelongsOrg").toString());
+        //接口参数增加上级电子围栏数据集名称
+        meta.put("TopClassDatasetName", data.get("TopClassDatasetName").toString());
         meta.put("Features", data.get("Features").toString());
         return meta;
     }

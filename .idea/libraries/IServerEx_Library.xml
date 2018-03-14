@@ -24,6 +24,7 @@
       <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/xmlbeans-2.6.0.jar!/" />
       <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/com.supermap.data-9.0.0-15319.jar!/" />
       <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/com.supermap.analyst.spatialanalyst-9.0.0-15319.jar!/" />
+      <root url="jar://D:/Software/SuperMap/IServer9D/webapps/iserver/WEB-INF/lib/com.supermap.data.topology-9.0.0-15319.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

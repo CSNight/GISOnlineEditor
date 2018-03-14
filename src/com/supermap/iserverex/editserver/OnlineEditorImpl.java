@@ -100,4 +100,9 @@ public class OnlineEditorImpl implements OnlineEditor, ComponentContextAware {
         return temp;
     }
 
+    @Override
+    public String BorderConflictCheck(String jsonElements, String paramType) {
+        return null;
+    }
+
 }
