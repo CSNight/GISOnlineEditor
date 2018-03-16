@@ -23,7 +23,7 @@ public class RestfulAPIRequest {
 
     public String CheckDataServerProvider(String ServerName) {
         String info = ConfigReader.WorkspaceInfoGet(ServerName);
-        if (info != "") {
+        if (!info.equals("")) {
             return info;
         } else {
             String map = GetDataServerProvider(ServerName);

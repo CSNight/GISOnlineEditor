@@ -114,8 +114,7 @@ public class ConfigReader {
             Element nList = root.element("datasource");
             @SuppressWarnings("unchecked")
             List<Element> cList = nList.elements();
-            for (int j = 0; j < cList.size(); j++) {
-                Element cnode = cList.get(j);
+            for (Element cnode : cList) {
                 configMap.put(cnode.getName(), cnode.getTextTrim());
             }
             ConfigReader.loaded = true;
