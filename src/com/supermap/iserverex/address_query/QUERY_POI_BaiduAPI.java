@@ -13,9 +13,8 @@ import java.util.Map;
 import static com.supermap.iserverex.utils.CoorTransform.Gps;
 import static com.supermap.iserverex.utils.CoorTransform.bd09_To_Gps84;
 import static com.supermap.iserverex.utils.CustomHttpRequest.sendGet;
-import static com.supermap.iserverex.utils.CustomHttpRequest.sendPost;
 
-public class QUERY_ADD_BaiduAPI {
+public class QUERY_POI_BaiduAPI {
     private String toQueryString(Map<?, ?> data) {
         StringBuilder queryString = new StringBuilder();
         for (Map.Entry<?, ?> pair : data.entrySet()) {
@@ -50,7 +49,7 @@ public class QUERY_ADD_BaiduAPI {
     private String CalculateAKSN(String sk, Map<String, String> param) {
         try {
             String paramsStr = toQueryString(param);
-            String wholeStr = "/cloudgc/v1/?" + paramsStr+ sk;
+            String wholeStr = "/geocoder/v2/?" + paramsStr+ sk;
             String tempStr = URLEncoder.encode(wholeStr, "UTF-8");
             return MD5(tempStr);
         } catch (UnsupportedEncodingException e) {
@@ -60,7 +59,7 @@ public class QUERY_ADD_BaiduAPI {
     }
 
     public String getDS(String Address) {
-        String serviceUrl = "http://api.map.baidu.com/cloudgc/v1/";
+        String serviceUrl = "http://api.map.baidu.com/geocoder/v2/";
         String ak = "ZeUEfsIRxiXoCKbVCCYyGtG3oATPf6hN";
         String sk = "ZOVLVeb09KCS4Fnu8T85QVPgtGqOSk3S";
         Map<String, String> params_map = new LinkedHashMap<>();
@@ -91,9 +90,5 @@ public class QUERY_ADD_BaiduAPI {
             }
         }
         return "";
-    }
-    public static void main(String[]args){
-        QUERY_ADD_BaiduAPI baiduAPI=new QUERY_ADD_BaiduAPI();
-        baiduAPI.getDS("北京市海淀区上地十街10号");
     }
 }
