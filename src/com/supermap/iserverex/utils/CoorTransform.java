@@ -82,7 +82,7 @@ public class CoorTransform {
             return true;
         else if (lat < 0.8293 || lat > 55.8271)
             return true;
-        else{
+        else {
             return false;
         }
     }

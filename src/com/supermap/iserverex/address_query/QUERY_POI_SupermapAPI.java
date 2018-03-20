@@ -1,15 +1,19 @@
 package com.supermap.iserverex.address_query;
 
+import com.supermap.data.*;
+import com.supermap.iserverex.operation.DATA_OP_BorderCheck;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.supermap.iserverex.utils.CustomHttpRequest.sendGet;
 
 public class QUERY_POI_SupermapAPI {
-    public static String getDS(String address) {
+    public static String getDS(String address, Workspace ws, DatasetVector dv) {
         String serviceUrl = "http://www.supermapol.com/iserver/services/location-china/rest/locationanalyst/China/geocoding.json";
         String post_content = null;
         try {
@@ -20,7 +24,12 @@ public class QUERY_POI_SupermapAPI {
         JSONArray infos = new JSONArray();
         String result = sendGet(serviceUrl, post_content);
         if (!result.equals("")) {
-            String res = "{result:" + result + "}";
+            String res = null;
+            try {
+                res = "{result:" + new String(result.getBytes("gbk"),"utf-8") + "}";
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             JSONObject jsonObject = JSONObject.fromObject(res);
             if (jsonObject.containsKey("result")) {
                 JSONArray jo = jsonObject.getJSONArray("result");
@@ -36,10 +45,57 @@ public class QUERY_POI_SupermapAPI {
                     info.element("confidence", confidence);
                     info.element("x", lng);
                     info.element("y", lat);
+                    info.element("relation", GetRelatedRegion(ws, dv, new Point2D(lng, lat)));
                     infos.add(info);
                 }
             }
         }
         return infos.toString();
+    }
+
+    private static String GetRelatedRegion(Workspace ws, DatasetVector dv, Point2D poi) {
+        try{
+        //设置查询参数
+        QueryParameter parameter = new QueryParameter();
+        parameter.setSpatialQueryObject(poi);
+        parameter.setSpatialQueryMode(SpatialQueryMode.WITHIN);
+        Recordset recordset = dv.query(parameter);
+        if (recordset.getRecordCount() > 0) {
+            return FeatureToJSONArray(recordset).toString();
+        }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return "";
+    }
+
+    private static JSONArray FeatureToJSONArray(Recordset rs) {
+        JSONArray joFeatArray = new JSONArray();
+        while (rs.isEOF()) {
+            GeoRegion geoRegion = (GeoRegion) rs.getGeometry();
+            List<GeoRegion> geoRegionList = new ArrayList<>();
+            DATA_OP_BorderCheck.RegionDecompose(geoRegionList, geoRegion);
+            for (GeoRegion gr : geoRegionList) {
+                JSONObject joFeat = new JSONObject();
+                JSONArray jsonArray = new JSONArray();
+                for (int i = 0; i < gr.getPartCount(); i++) {
+                    Point2Ds grPart = gr.getPart(i);
+                    for (int j = 0; j < grPart.getCount(); j++) {
+                        jsonArray.add(new double[]{grPart.getItem(j).getX(), grPart.getItem(j).y});
+                    }
+                }
+                joFeat.element("Geometry", jsonArray);
+                JSONObject joFields = new JSONObject();
+                Object[] field_values = rs.getValues();
+                FieldInfo[] field_names = rs.getFieldInfos().toArray();
+                for (int i = 0; i < field_values.length; i++) {
+                    joFields.element(field_names[i].getName(), field_values[i]);
+                }
+                joFeat.element("Fields", joFields);
+                joFeatArray.add(joFeat);
+            }
+            rs.moveNext();
+        }
+        return joFeatArray;
     }
 }

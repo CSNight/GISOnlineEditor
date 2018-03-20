@@ -1,5 +1,7 @@
 package com.supermap.iserverex.address_query;
 
+import com.supermap.data.DatasetVector;
+import com.supermap.data.Workspace;
 import com.supermap.iserverex.utils.GUID;
 
 import java.io.IOException;
@@ -10,18 +12,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QUERY_POI_SocketServer {
-    Map<String, ReceiveThread> receiveList = new HashMap<>();//存放已连接客户端类
-    private final static int MESSAGE_SIZE = 1024;//每次允许接受数据的最大长度
+    private Map<String, ReceiveThread> receiveList = new HashMap<>();//存放已连接客户端类
+    private final static int MESSAGE_SIZE = 2048;//每次允许接受数据的最大长度
     private int count = 0;
+    private Workspace ws;
+    private DatasetVector dv;
+    private ServerSocket serverSocket;
 
-    public static void main(String[] args) {
-        new QUERY_POI_SocketServer();
-        System.out.println("dsadsadadas");
+    public ServerSocket getServerSocket() {
+        return serverSocket;
     }
 
     //服务端处理逻辑
-    private QUERY_POI_SocketServer() {
-        ServerSocket serverSocket = null;
+    public QUERY_POI_SocketServer(Workspace ws, DatasetVector dv) {
+        this.ws = ws;
+        this.dv = dv;
+        serverSocket = null;
         try {
             serverSocket = new ServerSocket(45678);//用来监听的套接字，指定端口号
             while (true) {
@@ -32,20 +38,12 @@ public class QUERY_POI_SocketServer {
                 ReceiveThread receiveThread = new ReceiveThread(socket, id);
                 receiveThread.start();
                 receiveList.put(id, receiveThread);
-                //有客户端新上线，服务器就通知其他客户端
-                StringBuilder notice = new StringBuilder("有新客户端上线，现在在线客户端有：客户端:");
-                for (String thread_id : receiveList.keySet()) {
-                    notice.append(receiveList.get(thread_id).id).append(" ");
-                }
-                for (String thread_id : receiveList.keySet()) {
-                    new SendThread(receiveList.get(thread_id).socket, notice.toString()).start();
-                }
+                new SendThread(receiveList.get(id).socket, id).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     //接受消息的线程（同时也有记录对应客户端socket的作用）
     class ReceiveThread extends Thread {
@@ -87,12 +85,9 @@ public class QUERY_POI_SocketServer {
                             message.append(" ").append(receiveList.get(thread_id).id);
                         }
                         System.out.println(message);
-                        for (String thread_id : receiveList.keySet()) {
-                            new SendThread(receiveList.get(thread_id).socket, message.toString()).start();
-                        }
                     } else {
                         try {
-                            new SendThread(socket, QUERY_POI_SupermapAPI.getDS(new String(b))).start();
+                            new SendThread(socket, QUERY_POI_SupermapAPI.getDS(new String(b), ws, dv)).start();
                             count++;
                             System.out.print("\r" + count);
                         } catch (Exception e) {

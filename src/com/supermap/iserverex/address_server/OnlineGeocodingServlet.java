@@ -42,10 +42,17 @@ public class OnlineGeocodingServlet extends HttpServlet implements
             String reqType = data.get("RequestType").toString();
             String paramType = data.get("ParamsType").toString();
             String jsonElements = data.get("Elements").toString();
-            String ReponseStr = "";
+            String ResponseStr = "";
+            switch (reqType) {
+                case "Start":
+                    ResponseStr = onlinegeocoding.StartPOIServer(jsonElements, paramType);
+                    break;
+                case "Stop":
+                    ResponseStr = onlinegeocoding.StopPOISever();
+            }
             PrintWriter writer = response.getWriter();
-            System.out.println(ReponseStr);
-            writer.println(ReponseStr);
+            System.out.println(ResponseStr);
+            writer.println(ResponseStr);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

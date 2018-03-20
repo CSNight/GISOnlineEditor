@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DATA_OP_BorderCheck {
-    public static String BorderConfilctDetect(DatasetVector dv) {
+    public static String BorderConflictDetect(DatasetVector dv) {
         Workspace ws = dv.getDatasource().getWorkspace();
         Datasource ds = dv.getDatasource();
         DatasetVector topology_res_over = TopologyValidator.validate(dv, null, TopologyRule.REGION_NO_OVERLAP, 0.0001, null, ds, "topology_res_over");
@@ -44,7 +44,8 @@ public class DATA_OP_BorderCheck {
         ws.save();
         return JSONUtil.ConvertToString("json", res);
     }
-    public static String BorderTopClassConflictDetect(DatasetVector dv,DatasetVector dvtop){
+
+    public static String BorderTopClassConflictDetect(DatasetVector dv, DatasetVector dvtop) {
         Workspace ws = dv.getDatasource().getWorkspace();
         Datasource ds = dv.getDatasource();
         DatasetVector topology_res_over = TopologyValidator.validate(dv, dvtop, TopologyRule.REGION_NO_OVERLAP, 0.0001, null, ds, "topology_res_over");
@@ -77,6 +78,7 @@ public class DATA_OP_BorderCheck {
         ws.save();
         return JSONUtil.ConvertToString("json", res);
     }
+
     private static JSONArray FeatureToJSONArray(Recordset rs) {
         JSONArray joFeatArray = new JSONArray();
         while (rs.isEOF()) {
@@ -105,7 +107,7 @@ public class DATA_OP_BorderCheck {
         return joFeatArray;
     }
 
-    private static void RegionDecompose(List<GeoRegion> geoRegions, GeoRegion geoRegion) {
+    public static void RegionDecompose(List<GeoRegion> geoRegions, GeoRegion geoRegion) {
         GeoRegion[] geoRs = geoRegion.protectedDecompose();
         for (GeoRegion gr : geoRs) {
             if (gr.getPartCount() == 1) {

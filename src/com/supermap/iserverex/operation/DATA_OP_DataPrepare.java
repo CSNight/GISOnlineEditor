@@ -20,6 +20,8 @@ public class DATA_OP_DataPrepare {
         meta.put("BelongsOrg", data.get("BelongsOrg").toString());
         //接口参数增加上级电子围栏数据集名称
         meta.put("TopClassDatasetName", data.get("TopClassDatasetName").toString());
+        //接口参数增加同级参考围栏ID号数组
+        meta.put("ReferenceIDs", data.get("ReferenceIDs").toString());
         meta.put("Features", data.get("Features").toString());
         return meta;
     }

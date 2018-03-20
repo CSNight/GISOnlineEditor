@@ -49,7 +49,7 @@ public class QUERY_POI_BaiduAPI {
     private String CalculateAKSN(String sk, Map<String, String> param) {
         try {
             String paramsStr = toQueryString(param);
-            String wholeStr = "/geocoder/v2/?" + paramsStr+ sk;
+            String wholeStr = "/geocoder/v2/?" + paramsStr + sk;
             String tempStr = URLEncoder.encode(wholeStr, "UTF-8");
             return MD5(tempStr);
         } catch (UnsupportedEncodingException e) {
@@ -75,7 +75,7 @@ public class QUERY_POI_BaiduAPI {
                 JSONObject results = jsonObject.getJSONObject("result");
                 if (results.containsKey("location")) {
                     JSONObject location = results.getJSONObject("location");
-                    int confidence=results.getInt("confidence");
+                    int confidence = results.getInt("confidence");
                     double lng = location.getDouble("lng");
                     double lat = location.getDouble("lat");
                     Gps GS = bd09_To_Gps84(lat, lng);
@@ -84,7 +84,7 @@ public class QUERY_POI_BaiduAPI {
                     JSONObject xy = new JSONObject();
                     xy.element("x", new_lng);
                     xy.element("y", new_lat);
-                    xy.element("confidence",confidence);
+                    xy.element("confidence", confidence);
                     return xy.toString();
                 }
             }

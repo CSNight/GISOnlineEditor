@@ -163,6 +163,14 @@ public class OnlineEditorProviderImpl implements OnlineEditorProvider,
     public String BorderConflictCheck(String ServerName, String DatasetName) {
         Workspace workspace = getWorkspace(ServerName);
         DatasetVector dv = getDatasetVector(workspace, DatasetName);
-        return DATA_OP_BorderCheck.BorderConfilctDetect(dv);
+        return DATA_OP_BorderCheck.BorderConflictDetect(dv);
+    }
+
+    @Override
+    public String BorderTopClassConflictCheck(String ServerName, String DatasetName, String TopsetName) {
+        Workspace workspace = getWorkspace(ServerName);
+        DatasetVector dv = getDatasetVector(workspace, DatasetName);
+        DatasetVector dvtop = getDatasetVector(workspace, TopsetName);
+        return DATA_OP_BorderCheck.BorderTopClassConflictDetect(dv, dvtop);
     }
 }

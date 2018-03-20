@@ -38,30 +38,33 @@ public class OnlineEditorServlet extends HttpServlet implements
             String reqType = data.get("RequestType").toString();
             String paramType = data.get("ParamsType").toString();
             String jsonElements = data.get("Elements").toString();
-            String ReponseStr = "";
+            String ResponseStr = "";
             switch (reqType) {
                 case "Add":
-                    ReponseStr = onlineeditor.InsertFeature(jsonElements, paramType);
+                    ResponseStr = onlineeditor.InsertFeature(jsonElements, paramType);
                     break;
                 case "Update":
-                    ReponseStr = onlineeditor.UpdateFeature(jsonElements, paramType);
+                    ResponseStr = onlineeditor.UpdateFeature(jsonElements, paramType);
                     break;
                 case "Delete":
-                    ReponseStr = onlineeditor.DeleteFeature(jsonElements, paramType);
+                    ResponseStr = onlineeditor.DeleteFeature(jsonElements, paramType);
                     break;
                 case "QueryByID":
-                    ReponseStr = onlineeditor.QueryByFeatureIDAndDataset(jsonElements, paramType);
+                    ResponseStr = onlineeditor.QueryByFeatureIDAndDataset(jsonElements, paramType);
                     break;
                 case "QueryBySet":
-                    ReponseStr = onlineeditor.QueryByDatasetName(jsonElements, paramType);
+                    ResponseStr = onlineeditor.QueryByDatasetName(jsonElements, paramType);
                     break;
                 case "BorderCheck":
-                    ReponseStr = onlineeditor.BorderConflictCheck(jsonElements, paramType);
+                    ResponseStr = onlineeditor.BorderConflictCheck(jsonElements, paramType);
+                    break;
+                case "BorderTopCheck":
+                    ResponseStr = onlineeditor.BorderTopClassConflictCheck(jsonElements, paramType);
                     break;
             }
             PrintWriter writer = response.getWriter();
-            System.out.println(ReponseStr);
-            writer.println(ReponseStr);
+            System.out.println(ResponseStr);
+            writer.println(ResponseStr);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

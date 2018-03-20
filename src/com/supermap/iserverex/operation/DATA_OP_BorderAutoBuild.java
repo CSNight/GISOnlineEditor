@@ -5,13 +5,16 @@ import com.supermap.analyst.spatialanalyst.OverlayAnalystParameter;
 import com.supermap.data.*;
 import com.supermap.data.topology.TopologyValidator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DATA_OP_BorderAutoBuild {
-    public static GeoRegion BorderFix(GeoRegion geoRegion, DatasetVector dv) {
+    public static GeoRegion BorderFix(GeoRegion geoRegion, String referenceIDs, DatasetVector dv) {
         Workspace ws = dv.getDatasource().getWorkspace();
         Datasource ds = dv.getDatasource();
-        GeoRegion EraseGeo = BorderOverlapFix(geoRegion, dv, ds);
+        GeoRegion EraseGeo = BorderOverlapFix(geoRegion, referenceIDs, dv, ds);
         ws.save();
-        GeoRegion SeparateGeo = BorderSeparateFix(EraseGeo, dv, ds);
+        GeoRegion SeparateGeo = BorderSeparateFix(EraseGeo, referenceIDs, dv, ds);
         ws.save();
         return SeparateGeo;
     }
@@ -45,8 +48,15 @@ public class DATA_OP_BorderAutoBuild {
         }
     }
 
-    private static GeoRegion BorderOverlapFix(GeoRegion geoRegion, DatasetVector dv, Datasource ds) {
-        DatasetVector topology_res = TopologyValidator.validate(dv, null, TopologyRule.REGION_NO_OVERLAP, 0.0001, null, ds, "topology_res");
+    private static GeoRegion BorderOverlapFix(GeoRegion geoRegion, String referenceIDs, DatasetVector dv, Datasource ds) {
+        DatasetVector topology_res;
+        if (!referenceIDs.equals("")) {
+            topology_res = TopologyValidator.validate(dv, ReferenceSetBuild(referenceIDs.split("|"), dv, ds), TopologyRule.REGION_NO_OVERLAP,
+                    0.0001, null, ds, "topology_res");
+        } else {
+            topology_res = TopologyValidator.validate(dv, null, TopologyRule.REGION_NO_OVERLAP,
+                    0.0001, null, ds, "topology_res");
+        }
         Recordset rs = topology_res.getRecordset(false, CursorType.DYNAMIC);
         GeoRegion new_geo = geoRegion.clone();
         while (rs.isEOF()) {
@@ -59,11 +69,21 @@ public class DATA_OP_BorderAutoBuild {
         rs.close();
         rs.dispose();
         ds.getDatasets().delete("topology_res");
+        if (ds.getDatasets().contains("TempReference")) {
+            ds.getDatasets().delete("TempReference");
+        }
         return new_geo;
     }
 
-    private static GeoRegion BorderSeparateFix(GeoRegion geoRegion, DatasetVector dv, Datasource ds) {
-        DatasetVector topology_res = TopologyValidator.validate(dv, null, TopologyRule.REGION_NO_GAPS, 0.0001, null, ds, "topology_res");
+    private static GeoRegion BorderSeparateFix(GeoRegion geoRegion, String referenceIDs, DatasetVector dv, Datasource ds) {
+        DatasetVector topology_res;
+        if (!referenceIDs.equals("")) {
+            topology_res = TopologyValidator.validate(dv, ReferenceSetBuild(referenceIDs.split("|"), dv, ds), TopologyRule.REGION_NO_GAPS,
+                    0.0001, null, ds, "topology_res");
+        } else {
+            topology_res = TopologyValidator.validate(dv, null, TopologyRule.REGION_NO_GAPS,
+                    0.0001, null, ds, "topology_res");
+        }
         Recordset rs = topology_res.getRecordset(false, CursorType.DYNAMIC);
         GeoRegion new_geo = geoRegion.clone();
         while (rs.isEOF()) {
@@ -76,6 +96,9 @@ public class DATA_OP_BorderAutoBuild {
         rs.close();
         rs.dispose();
         ds.getDatasets().delete("topology_res");
+        if (ds.getDatasets().contains("TempReference")) {
+            ds.getDatasets().delete("TempReference");
+        }
         return new_geo;
     }
 
@@ -98,5 +121,42 @@ public class DATA_OP_BorderAutoBuild {
         rs.dispose();
         ws.save();
         return (DatasetVector) ds.getDatasets().get("TempErase");
+    }
+
+    private static DatasetVector ReferenceSetBuild(String[] referenceIDs, DatasetVector dv, Datasource ds) {
+        try {
+            Datasets datasets = ds.getDatasets();
+            DatasetVectorInfo datasetvectorInfoIdentity = new DatasetVectorInfo();
+            datasetvectorInfoIdentity.setType(DatasetType.REGION);
+            datasetvectorInfoIdentity.setName("TempReference");
+            if (!datasets.isAvailableDatasetName("TempReference")) {
+                datasets.delete("TempReference");
+            }
+            DatasetVectorInfo datasetVectorInfo = new DatasetVectorInfo();
+            datasetVectorInfo.setType(DatasetType.REGION);
+            datasetVectorInfo.setName("TempReference");
+            DatasetVector dv_new = datasets.create(datasetVectorInfo);
+            FieldInfos fieldInfos = dv.getFieldInfos();
+            dv_new.getFieldInfos().addRange(fieldInfos.toArray());
+            Recordset rs_old = dv.getRecordset(false, CursorType.DYNAMIC);
+            Recordset rs_new = dv_new.getRecordset(false, CursorType.DYNAMIC);
+            for (String id : referenceIDs) {
+                if (rs_old.seekID(Integer.parseInt(id))) {
+                    Map<String, Object> fields = new HashMap<>();
+                    Object[] field_values = rs_old.getValues();
+                    FieldInfo[] field_names = rs_old.getFieldInfos().toArray();
+                    for (int i = 0; i < field_values.length; i++) {
+                        fields.put(field_names[i].getName(), field_values[i]);
+                    }
+                    rs_new.addNew(rs_old.getGeometry(), fields);
+                    rs_new.update();
+                }
+            }
+            return dv_new;
+        } catch (Exception ex) {
+            ds.getDatasets().delete("TempReference");
+            ds.getWorkspace().save();
+            return null;
+        }
     }
 }

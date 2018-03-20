@@ -34,6 +34,7 @@ public class DATA_OP_DataModify {
             JSONObject jselements = new JSONObject();
             JSONArray jsastatus = new JSONArray();
             String TopClassDatasetName = meta.get("TopClassDatasetName");
+            String ReferenceIDs = meta.get("ReferenceIDs");
             Recordset rs = dv.getRecordset(false, CursorType.DYNAMIC);
             for (int i = 0; i < infos.size(); i++) {
                 if (meta.get("FeatureType").equals("Region")) {
@@ -48,7 +49,7 @@ public class DATA_OP_DataModify {
                     }
                     rs.update();
                     rs.edit();
-                    rs.setGeometry(DATA_OP_BorderAutoBuild.BorderFix((GeoRegion) geo, dv));
+                    rs.setGeometry(DATA_OP_BorderAutoBuild.BorderFix((GeoRegion) geo, ReferenceIDs, dv));
                     rs.update();
                     meta.put("featureid", rs.getID() + "");
                     byte[] new_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), rs.getID());
@@ -100,6 +101,7 @@ public class DATA_OP_DataModify {
             JSONObject jselements = new JSONObject();
             JSONArray jsastatus = new JSONArray();
             String TopClassDatasetName = meta.get("TopClassDatasetName");
+            String ReferenceIDs = meta.get("ReferenceIDs");
             Recordset rs = dv.getRecordset(false, CursorType.DYNAMIC);
             for (String key : new_info.keySet()) {
                 if (meta.get("FeatureType").equals("Region")) {
@@ -118,7 +120,7 @@ public class DATA_OP_DataModify {
                         rs.setValues(feature.get(geo));
                         rs.update();
                         rs.edit();
-                        rs.setGeometry(DATA_OP_BorderAutoBuild.BorderFix((GeoRegion) geo, dv));
+                        rs.setGeometry(DATA_OP_BorderAutoBuild.BorderFix((GeoRegion) geo, ReferenceIDs, dv));
                         boolean updateres = rs.update();
                         meta.put("featureid", FeatID + "");
                         byte[] new_f = featureTobyte(rs.getFeature(), feature.get(geo).keySet().toArray(), FeatID);

@@ -12,4 +12,6 @@ public interface OnlineEditorProvider {
     String QueryByIDAndSet(String FeatureID, String DatasetName);
 
     String BorderConflictCheck(String ServerName, String DatasetName);
+
+    String BorderTopClassConflictCheck(String ServerName, String DatasetName, String TopsetName);
 }

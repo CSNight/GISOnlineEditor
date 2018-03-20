@@ -12,4 +12,6 @@ public interface OnlineEditor {
     String QueryByFeatureIDAndDataset(String jsonElements, String paramType);
 
     String BorderConflictCheck(String jsonElements, String paramType);
+
+    String BorderTopClassConflictCheck(String jsonElements, String paramType);
 }
