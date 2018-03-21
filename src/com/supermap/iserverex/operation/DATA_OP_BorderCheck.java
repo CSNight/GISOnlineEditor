@@ -81,7 +81,7 @@ public class DATA_OP_BorderCheck {
 
     private static JSONArray FeatureToJSONArray(Recordset rs) {
         JSONArray joFeatArray = new JSONArray();
-        while (rs.isEOF()) {
+        while (!rs.isEOF()) {
             GeoRegion geoRegion = (GeoRegion) rs.getGeometry();
             List<GeoRegion> geoRegionList = new ArrayList<>();
             RegionDecompose(geoRegionList, geoRegion);

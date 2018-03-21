@@ -135,7 +135,7 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
             }
             socketServer = null;
             if (socket_server != null) {
-                socket_server.stop();
+                socket_server.interrupt();
             }
             res.setStatus(200);
             res.setNs_type("Stop");

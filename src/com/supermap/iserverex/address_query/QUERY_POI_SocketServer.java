@@ -3,7 +3,6 @@ package com.supermap.iserverex.address_query;
 import com.supermap.data.DatasetVector;
 import com.supermap.data.Workspace;
 import com.supermap.iserverex.utils.GUID;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -13,7 +12,7 @@ import java.util.Map;
 
 public class QUERY_POI_SocketServer {
     private Map<String, ReceiveThread> receiveList = new HashMap<>();//存放已连接客户端类
-    private final static int MESSAGE_SIZE = 2048;//每次允许接受数据的最大长度
+    private final static int MESSAGE_SIZE = 4096;//每次允许接受数据的最大长度
     private int count = 0;
     private Workspace ws;
     private DatasetVector dv;
@@ -38,7 +37,6 @@ public class QUERY_POI_SocketServer {
                 ReceiveThread receiveThread = new ReceiveThread(socket, id);
                 receiveThread.start();
                 receiveList.put(id, receiveThread);
-                new SendThread(receiveList.get(id).socket, id).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +54,7 @@ public class QUERY_POI_SocketServer {
             this.id = id;
             try {
                 //给连接上的客户端发送，分配的客户端编号的通知
-                socket.getOutputStream().write(("你的客户端编号是" + id).getBytes());
+                socket.getOutputStream().write(id.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }

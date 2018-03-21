@@ -26,7 +26,7 @@ public class QUERY_POI_SupermapAPI {
         if (!result.equals("")) {
             String res = null;
             try {
-                res = "{result:" + new String(result.getBytes("gbk"),"utf-8") + "}";
+                res = "{result:" + new String(result.getBytes("gbk"), "utf-8") + "}";
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -54,47 +54,52 @@ public class QUERY_POI_SupermapAPI {
     }
 
     private static String GetRelatedRegion(Workspace ws, DatasetVector dv, Point2D poi) {
-        try{
-        //设置查询参数
-        QueryParameter parameter = new QueryParameter();
-        parameter.setSpatialQueryObject(poi);
-        parameter.setSpatialQueryMode(SpatialQueryMode.WITHIN);
-        Recordset recordset = dv.query(parameter);
-        if (recordset.getRecordCount() > 0) {
-            return FeatureToJSONArray(recordset).toString();
-        }
-        }catch(Exception ex){
+        try {
+            //设置查询参数
+            QueryParameter parameter = new QueryParameter();
+            parameter.setSpatialQueryObject(poi);
+            parameter.setSpatialQueryMode(SpatialQueryMode.WITHIN);
+            parameter.setCursorType(CursorType.DYNAMIC);
+            Recordset recordset = dv.query(parameter);
+            if (recordset.getRecordCount() > 0) {
+                return FeatureToJSONArray(recordset,dv).toString();
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return "";
     }
 
-    private static JSONArray FeatureToJSONArray(Recordset rs) {
+    private static JSONArray FeatureToJSONArray(Recordset rs,DatasetVector dv) {
         JSONArray joFeatArray = new JSONArray();
-        while (rs.isEOF()) {
-            GeoRegion geoRegion = (GeoRegion) rs.getGeometry();
-            List<GeoRegion> geoRegionList = new ArrayList<>();
-            DATA_OP_BorderCheck.RegionDecompose(geoRegionList, geoRegion);
-            for (GeoRegion gr : geoRegionList) {
-                JSONObject joFeat = new JSONObject();
-                JSONArray jsonArray = new JSONArray();
-                for (int i = 0; i < gr.getPartCount(); i++) {
-                    Point2Ds grPart = gr.getPart(i);
-                    for (int j = 0; j < grPart.getCount(); j++) {
-                        jsonArray.add(new double[]{grPart.getItem(j).getX(), grPart.getItem(j).y});
+        try {
+            while (!rs.isEOF()) {
+                GeoRegion geoRegion = (GeoRegion) rs.getGeometry();
+                List<GeoRegion> geoRegionList = new ArrayList<>();
+                DATA_OP_BorderCheck.RegionDecompose(geoRegionList, geoRegion);
+                for (GeoRegion gr : geoRegionList) {
+                    JSONObject joFeat = new JSONObject();
+                    JSONArray jsonArray = new JSONArray();
+                    for (int i = 0; i < gr.getPartCount(); i++) {
+                        Point2Ds grPart = gr.getPart(i);
+                        for (int j = 0; j < grPart.getCount(); j++) {
+                            jsonArray.add(new double[]{grPart.getItem(j).getX(), grPart.getItem(j).y});
+                        }
                     }
+                    joFeat.element("Geometry", jsonArray);
+                    JSONObject joFields = new JSONObject();
+                    Object[] field_values = rs.getValues();
+                    FieldInfos field_names = rs.getFieldInfos();
+                    for (int i = 0; i < field_names.getCount(); i++) {
+                        joFields.element(field_names.get(i).getName(), field_values[i]);
+                    }
+                    joFeat.element("Fields", joFields);
+                    joFeatArray.add(joFeat);
                 }
-                joFeat.element("Geometry", jsonArray);
-                JSONObject joFields = new JSONObject();
-                Object[] field_values = rs.getValues();
-                FieldInfo[] field_names = rs.getFieldInfos().toArray();
-                for (int i = 0; i < field_values.length; i++) {
-                    joFields.element(field_names[i].getName(), field_values[i]);
-                }
-                joFeat.element("Fields", joFields);
-                joFeatArray.add(joFeat);
+                rs.moveNext();
             }
-            rs.moveNext();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return joFeatArray;
     }

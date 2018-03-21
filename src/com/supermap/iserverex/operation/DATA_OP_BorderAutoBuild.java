@@ -59,7 +59,7 @@ public class DATA_OP_BorderAutoBuild {
         }
         Recordset rs = topology_res.getRecordset(false, CursorType.DYNAMIC);
         GeoRegion new_geo = geoRegion.clone();
-        while (rs.isEOF()) {
+        while (!rs.isEOF()) {
             GeoRegion erase_part = (GeoRegion) rs.getGeometry().clone();
             GeoRegion after_erase = (GeoRegion) Geometrist.erase(new_geo, erase_part);
             new_geo.dispose();
@@ -86,7 +86,7 @@ public class DATA_OP_BorderAutoBuild {
         }
         Recordset rs = topology_res.getRecordset(false, CursorType.DYNAMIC);
         GeoRegion new_geo = geoRegion.clone();
-        while (rs.isEOF()) {
+        while (!rs.isEOF()) {
             GeoRegion union_part = (GeoRegion) rs.getGeometry().clone();
             GeoRegion after_union = (GeoRegion) Geometrist.union(new_geo, union_part);
             new_geo.dispose();
@@ -144,9 +144,9 @@ public class DATA_OP_BorderAutoBuild {
                 if (rs_old.seekID(Integer.parseInt(id))) {
                     Map<String, Object> fields = new HashMap<>();
                     Object[] field_values = rs_old.getValues();
-                    FieldInfo[] field_names = rs_old.getFieldInfos().toArray();
-                    for (int i = 0; i < field_values.length; i++) {
-                        fields.put(field_names[i].getName(), field_values[i]);
+                    FieldInfos field_names = rs_old.getFieldInfos();
+                    for (int i = 0; i < field_names.getCount(); i++) {
+                        fields.put(field_names.get(i).getName(), field_values[i]);
                     }
                     rs_new.addNew(rs_old.getGeometry(), fields);
                     rs_new.update();
