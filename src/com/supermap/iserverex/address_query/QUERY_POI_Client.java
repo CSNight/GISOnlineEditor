@@ -16,7 +16,7 @@ public class QUERY_POI_Client {
     private ReceiveThread rec;
     private static final int MESSAGE_SIZE = 4096;//每次允许接受数据的最大长度
 
-    private QUERY_POI_Client() {
+    public QUERY_POI_Client() {
         try {
             socket = new Socket("127.0.0.1", 45678);
             if (socket.isConnected()) {
@@ -44,7 +44,15 @@ public class QUERY_POI_Client {
             return "";
         }
     }
-
+    public String Stop(){
+        rec.interrupt();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "success";
+    }
     //发送消息的线程
     class SendThread extends Thread {
         Socket socket;
@@ -70,23 +78,14 @@ public class QUERY_POI_Client {
     //接受消息的线程（同时也有记录对应客户端socket的作用）
     class ReceiveThread extends Thread {
         Socket socket;//客户端对应的套接字
-
         public String getRes() {
             return res;
         }
-
         String res;
-
-        public void setStatus(boolean status) {
-            this.status = status;
-        }
-
         volatile boolean status = false;
-
         ReceiveThread(Socket socket) {
             this.socket = socket;
         }
-
         @Override
         public void run() {
             super.run();

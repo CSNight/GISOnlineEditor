@@ -44,4 +44,38 @@ public class OnlineGeocodingImpl implements OnlineGeocoding, ComponentContextAwa
     public String StopPOISever() {
         return onlinegeocodingProvider.StopPOISever();
     }
+
+    @Override
+    public String NewClientSocket() {
+        return onlinegeocodingProvider.NewClientSocket();
+    }
+
+    @Override
+    public String POISearch(String jsonElements, String paramType) {
+        String temp = null;
+        try {
+            // TODO Auto-generated method stub
+            JSONObject data = JSONObject.fromObject(jsonElements);
+            String ID = data.getString("ID");
+            String ADDRESS = data.getString("ADDRESS");
+            temp = onlinegeocodingProvider.POISearch(ID, ADDRESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    @Override
+    public String POI_Client_Stop(String jsonElements, String paramType) {
+        String temp = null;
+        try {
+            // TODO Auto-generated method stub
+            JSONObject data = JSONObject.fromObject(jsonElements);
+            String ID = data.getString("ID");
+            temp = onlinegeocodingProvider.POI_Client_Stop(ID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
 }

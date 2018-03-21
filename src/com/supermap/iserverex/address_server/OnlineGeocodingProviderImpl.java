@@ -3,6 +3,7 @@ package com.supermap.iserverex.address_server;
 import com.supermap.data.DatasetVector;
 import com.supermap.data.Datasource;
 import com.supermap.data.Workspace;
+import com.supermap.iserverex.address_query.QUERY_POI_Client;
 import com.supermap.iserverex.address_query.QUERY_POI_SocketServer;
 import com.supermap.iserverex.utils.ConfigReader;
 import com.supermap.iserverex.utils.JSONUtil;
@@ -24,6 +25,7 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
     private String DatasetName = "Countries";
     private QUERY_POI_SocketServer socketServer = null;
     private Thread socket_server;
+    private Map<String, QUERY_POI_Client> clients = new HashMap<>();
 
     public OnlineGeocodingProviderImpl() {
         socket_server = new Thread(StartPOIServer(ServerName, DatasetName));
@@ -137,6 +139,7 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
             if (socket_server != null) {
                 socket_server.interrupt();
             }
+            clients.clear();
             res.setStatus(200);
             res.setNs_type("Stop");
             res.setMessage("success");
@@ -149,5 +152,33 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
             return JSONUtil.ConvertToString("json", res);
         }
 
+    }
+
+    @Override
+    public String NewClientSocket() {
+        QUERY_POI_Client poi_client = new QUERY_POI_Client();
+        String id = poi_client.SendMessage("");
+        clients.put(id, poi_client);
+        return id;
+    }
+
+    @Override
+    public String POISearch(String ID, String address) {
+        QUERY_POI_Client poi_client = clients.get(ID);
+        if (poi_client != null) {
+            return poi_client.SendMessage(address);
+        }
+        return "";
+    }
+
+    @Override
+    public String POI_Client_Stop(String ID) {
+        QUERY_POI_Client poi_client = clients.get(ID);
+        if (poi_client != null) {
+            poi_client.Stop();
+            clients.remove(ID);
+            return "success";
+        }
+        return "failed";
     }
 }

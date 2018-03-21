@@ -49,6 +49,16 @@ public class OnlineGeocodingServlet extends HttpServlet implements
                     break;
                 case "Stop":
                     ResponseStr = onlinegeocoding.StopPOISever();
+                    break;
+                case "NewClient":
+                    ResponseStr = onlinegeocoding.NewClientSocket();
+                    break;
+                case "POISearch":
+                    ResponseStr = onlinegeocoding.POISearch(jsonElements, paramType);
+                    break;
+                case "POIStop":
+                    ResponseStr = onlinegeocoding.POI_Client_Stop(jsonElements, paramType);
+                    break;
             }
             PrintWriter writer = response.getWriter();
             System.out.println(ResponseStr);
