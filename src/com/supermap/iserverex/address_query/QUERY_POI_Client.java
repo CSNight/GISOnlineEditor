@@ -44,7 +44,8 @@ public class QUERY_POI_Client {
             return "";
         }
     }
-    public String Stop(){
+
+    public String Stop() {
         rec.interrupt();
         try {
             socket.close();
@@ -53,6 +54,7 @@ public class QUERY_POI_Client {
         }
         return "success";
     }
+
     //发送消息的线程
     class SendThread extends Thread {
         Socket socket;
@@ -78,14 +80,18 @@ public class QUERY_POI_Client {
     //接受消息的线程（同时也有记录对应客户端socket的作用）
     class ReceiveThread extends Thread {
         Socket socket;//客户端对应的套接字
+
         public String getRes() {
             return res;
         }
+
         String res;
         volatile boolean status = false;
+
         ReceiveThread(Socket socket) {
             this.socket = socket;
         }
+
         @Override
         public void run() {
             super.run();

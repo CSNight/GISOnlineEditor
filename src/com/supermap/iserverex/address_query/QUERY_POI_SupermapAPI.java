@@ -62,7 +62,7 @@ public class QUERY_POI_SupermapAPI {
             parameter.setCursorType(CursorType.DYNAMIC);
             Recordset recordset = dv.query(parameter);
             if (recordset.getRecordCount() > 0) {
-                return FeatureToJSONArray(recordset,dv).toString();
+                return FeatureToJSONArray(recordset, dv).toString();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -70,7 +70,7 @@ public class QUERY_POI_SupermapAPI {
         return "";
     }
 
-    private static JSONArray FeatureToJSONArray(Recordset rs,DatasetVector dv) {
+    private static JSONArray FeatureToJSONArray(Recordset rs, DatasetVector dv) {
         JSONArray joFeatArray = new JSONArray();
         try {
             while (!rs.isEOF()) {
