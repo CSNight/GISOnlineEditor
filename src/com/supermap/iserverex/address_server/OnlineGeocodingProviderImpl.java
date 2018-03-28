@@ -3,6 +3,7 @@ package com.supermap.iserverex.address_server;
 import com.supermap.data.DatasetVector;
 import com.supermap.data.Datasource;
 import com.supermap.data.Workspace;
+import com.supermap.iserverex.address_query.QUERY_POI_BaiduAPI;
 import com.supermap.iserverex.address_query.QUERY_POI_Client;
 import com.supermap.iserverex.address_query.QUERY_POI_SocketServer;
 import com.supermap.iserverex.utils.ConfigReader;
@@ -21,15 +22,13 @@ import java.util.Map;
 public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
         ProviderContextAware {
     public String Info = null;
-    private String ServerName = "data-world";
-    private String DatasetName = "Countries";
+    private String ServerName = "data-WS_JSJT";
+    private String DatasetName = "cdtdjgwl";
     private QUERY_POI_SocketServer socketServer = null;
     private Thread socket_server;
     private Map<String, QUERY_POI_Client> clients = new HashMap<>();
 
     public OnlineGeocodingProviderImpl() {
-        socket_server = new Thread(StartPOIServer(ServerName, DatasetName));
-        socket_server.start();
     }
 
     @Override
@@ -88,7 +87,7 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
     public String StartPOIServer(String ServerName, String DatasetName) {
         ResultMsg res = new ResultMsg();
         try {
-            socket_server = new Thread(StartServer(ServerName, DatasetName));
+            socket_server = new Thread(() -> StartServer(ServerName, DatasetName));
             socket_server.start();
             res.setStatus(200);
             res.setNs_type("Stop");
@@ -157,18 +156,21 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
     @Override
     public String NewClientSocket() {
         QUERY_POI_Client poi_client = new QUERY_POI_Client();
-        String id = poi_client.SendMessage("");
+        String id = poi_client.SendMessage("").trim().replaceAll("/\u0000/", "").substring(0, 36);
         clients.put(id, poi_client);
         return id;
     }
 
     @Override
-    public String POISearch(String ID, String address) {
-        QUERY_POI_Client poi_client = clients.get(ID);
-        if (poi_client != null) {
-            return poi_client.SendMessage(address);
-        }
-        return "";
+    public String POISearch(String ServerName, String DatasetName, String address, boolean isContainGeo) {
+        Workspace workspace = getWorkspace(ServerName);
+        DatasetVector dv = getDatasetVector(workspace, DatasetName);
+
+        return QUERY_POI_BaiduAPI.getDS(address, isContainGeo, dv);
+//        QUERY_POI_Client poi_client = clients.get(ID);
+//        if (poi_client != null) {
+//            return poi_client.SendMessage(address);
+//        }
     }
 
     @Override

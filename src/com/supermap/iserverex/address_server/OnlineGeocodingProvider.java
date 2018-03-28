@@ -7,7 +7,7 @@ public interface OnlineGeocodingProvider {
 
     String NewClientSocket();
 
-    String POISearch(String ID, String address);
+    String POISearch(String ServerName, String DatasetName, String address, boolean isContainGeo);
 
     String POI_Client_Stop(String ID);
 }

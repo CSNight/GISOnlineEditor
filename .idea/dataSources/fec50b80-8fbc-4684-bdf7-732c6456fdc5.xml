@@ -135,25 +135,25 @@
     </table>
     <column id="41" parent="38" name="BLOCKHASH">
       <Position>1</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="42" parent="38" name="BLOCKINDEX">
       <Position>2</Position>
-      <DataType>NUMBER(*)|0</DataType>
+      <DataType>NUMBER(*)|0s</DataType>
     </column>
     <column id="43" parent="38" name="TIMESTAMP">
       <Position>3</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
     <column id="44" parent="38" name="BLOCK">
       <Position>4</Position>
-      <DataType>BLOB|0</DataType>
+      <DataType>BLOB|0s</DataType>
     </column>
     <column id="45" parent="38" name="PREVIOUSHASH">
       <Position>5</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <index id="46" parent="38" name="SYS_C0011258">
       <ObjectId>74002</ObjectId>
@@ -174,78 +174,78 @@
     </key>
     <column id="48" parent="39" name="ID">
       <Position>1</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="49" parent="39" name="OPERATIONTIME">
       <Position>2</Position>
-      <DataType>TIMESTAMP(6)|0</DataType>
+      <DataType>TIMESTAMP(6)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
     <column id="50" parent="39" name="OPROLE">
       <Position>3</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="51" parent="39" name="OPSERVER">
       <Position>4</Position>
-      <DataType>VARCHAR2(200)|0</DataType>
+      <DataType>VARCHAR2(200)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
     <column id="52" parent="39" name="OPWORKSPACE">
       <Position>5</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="53" parent="39" name="OPDATASOURCE">
       <Position>6</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="54" parent="39" name="OPDATASET">
       <Position>7</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="55" parent="39" name="OPFEATUREID">
       <Position>8</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="56" parent="39" name="OLD_OPINFO">
       <Position>9</Position>
-      <DataType>BLOB|0</DataType>
+      <DataType>BLOB|0s</DataType>
     </column>
     <column id="57" parent="39" name="NEW_OPINFO">
       <Position>10</Position>
-      <DataType>BLOB|0</DataType>
+      <DataType>BLOB|0s</DataType>
     </column>
     <column id="58" parent="39" name="OP_TYPE">
       <Position>11</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="59" parent="40" name="ID">
       <Position>1</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="60" parent="40" name="BOOKNAME">
       <Position>2</Position>
-      <DataType>VARCHAR2(100)|0</DataType>
+      <DataType>VARCHAR2(100)|0s</DataType>
     </column>
     <column id="61" parent="40" name="DOWNLOADURL">
       <Position>3</Position>
-      <DataType>VARCHAR2(200)|0</DataType>
+      <DataType>VARCHAR2(200)|0s</DataType>
     </column>
     <column id="62" parent="40" name="CHPCOUNT">
       <Position>4</Position>
-      <DataType>NUMBER(*)|0</DataType>
+      <DataType>NUMBER(*)|0s</DataType>
     </column>
     <column id="63" parent="40" name="CREATETIME">
       <Position>5</Position>
-      <DataType>DATE|0</DataType>
+      <DataType>DATE|0s</DataType>
     </column>
     <column id="64" parent="40" name="BOOKBLOB">
       <Position>6</Position>
-      <DataType>BLOB|0</DataType>
+      <DataType>BLOB|0s</DataType>
     </column>
     <column id="65" parent="40" name="BOOKSIZE">
       <Position>7</Position>
-      <DataType>NUMBER(*)|0</DataType>
+      <DataType>NUMBER(*)|0s</DataType>
     </column>
     <index id="66" parent="40" name="PK_ID">
       <ObjectId>73852</ObjectId>

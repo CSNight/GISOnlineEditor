@@ -5,11 +5,9 @@ import com.supermap.services.InterfaceContext;
 import com.supermap.services.InterfaceContextAware;
 import net.sf.json.JSONObject;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.List;
@@ -25,12 +23,10 @@ public class OnlineGeocodingServlet extends HttpServlet implements
         this.id = String.valueOf(System.currentTimeMillis());
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -44,21 +40,21 @@ public class OnlineGeocodingServlet extends HttpServlet implements
             String jsonElements = data.get("Elements").toString();
             String ResponseStr = "";
             switch (reqType) {
-                case "Start":
-                    ResponseStr = onlinegeocoding.StartPOIServer(jsonElements, paramType);
-                    break;
-                case "Stop":
-                    ResponseStr = onlinegeocoding.StopPOISever();
-                    break;
-                case "NewClient":
-                    ResponseStr = onlinegeocoding.NewClientSocket();
-                    break;
+//                case "Start":
+//                    ResponseStr = onlinegeocoding.StartPOIServer(jsonElements, paramType);
+//                    break;
+//                case "Stop":
+//                    ResponseStr = onlinegeocoding.StopPOISever();
+//                    break;
+//                case "NewClient":
+//                    ResponseStr = onlinegeocoding.NewClientSocket();
+//                    break;
                 case "POISearch":
                     ResponseStr = onlinegeocoding.POISearch(jsonElements, paramType);
                     break;
-                case "POIStop":
-                    ResponseStr = onlinegeocoding.POI_Client_Stop(jsonElements, paramType);
-                    break;
+//                case "POIStop":
+//                    ResponseStr = onlinegeocoding.POI_Client_Stop(jsonElements, paramType);
+//                    break;
             }
             PrintWriter writer = response.getWriter();
             System.out.println(ResponseStr);

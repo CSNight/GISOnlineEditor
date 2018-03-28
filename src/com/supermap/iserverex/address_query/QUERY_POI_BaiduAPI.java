@@ -1,13 +1,17 @@
 package com.supermap.iserverex.address_query;
 
 
+import com.supermap.data.*;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.supermap.iserverex.utils.CoorTransform.Gps;
@@ -15,7 +19,7 @@ import static com.supermap.iserverex.utils.CoorTransform.bd09_To_Gps84;
 import static com.supermap.iserverex.utils.CustomHttpRequest.sendGet;
 
 public class QUERY_POI_BaiduAPI {
-    private String toQueryString(Map<?, ?> data) {
+    private static String toQueryString(Map<?, ?> data) {
         StringBuilder queryString = new StringBuilder();
         for (Map.Entry<?, ?> pair : data.entrySet()) {
             queryString.append(pair.getKey()).append("=");
@@ -31,7 +35,7 @@ public class QUERY_POI_BaiduAPI {
         return queryString.toString();
     }
 
-    private String MD5(String md5) {
+    private static String MD5(String md5) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] array = md.digest(md5.getBytes());
@@ -46,7 +50,7 @@ public class QUERY_POI_BaiduAPI {
         return null;
     }
 
-    private String CalculateAKSN(String sk, Map<String, String> param) {
+    private static String CalculateAKSN(String sk, Map<String, String> param) {
         try {
             String paramsStr = toQueryString(param);
             String wholeStr = "/geocoder/v2/?" + paramsStr + sk;
@@ -58,10 +62,10 @@ public class QUERY_POI_BaiduAPI {
         }
     }
 
-    public String getDS(String Address) {
+    public static String getDS(String Address, boolean isContainGeo, DatasetVector dv) {
         String serviceUrl = "http://api.map.baidu.com/geocoder/v2/";
-        String ak = "ZeUEfsIRxiXoCKbVCCYyGtG3oATPf6hN";
-        String sk = "ZOVLVeb09KCS4Fnu8T85QVPgtGqOSk3S";
+        String ak = "ysakexdGggTdMGuuqPsw0GCKzmjkMojj";
+        String sk = "T0SCA8glum8SijitYSxy9roz5UXIjSG6";
         Map<String, String> params_map = new LinkedHashMap<>();
         params_map.put("address", Address);
         params_map.put("ak", ak);
@@ -85,10 +89,91 @@ public class QUERY_POI_BaiduAPI {
                     xy.element("x", new_lng);
                     xy.element("y", new_lat);
                     xy.element("confidence", confidence);
+                    xy.element("relation", GetRelatedRegion(dv, isContainGeo, lonlat2mercator(lng, lat)));
                     return xy.toString();
                 }
             }
         }
         return "";
+    }
+
+    private static Point2D lonlat2mercator(double x, double y) {
+        double lng = x * 20037508.34 / 180;
+        double lat = Math.log(Math.tan((90 + y) * Math.PI / 360)) / (Math.PI / 180);
+        lat = lat * 20037508.34 / 180;
+        return new Point2D(lng, lat);
+    }
+
+    private static String GetRelatedRegion(DatasetVector dv, boolean isContainGeo, Point2D poi) {
+        try {
+            //设置查询参数
+            QueryParameter parameter = new QueryParameter();
+            parameter.setSpatialQueryObject(poi);
+            parameter.setSpatialQueryMode(SpatialQueryMode.WITHIN);
+            parameter.setCursorType(CursorType.DYNAMIC);
+            Recordset recordset = dv.query(parameter);
+            if (recordset.getRecordCount() > 0) {
+                return FeatureToJSONArray(recordset, isContainGeo).toString();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
+    }
+
+    private static JSONArray FeatureToJSONArray(Recordset rs, boolean isContainGeo) {
+        JSONArray joFeatArray = new JSONArray();
+        try {
+            while (!rs.isEOF()) {
+                if (isContainGeo) {
+                    GeoRegion geoRegion = (GeoRegion) rs.getGeometry();
+                    JSONObject joFeat = new JSONObject();
+                    JSONArray jsonArray = new JSONArray();
+                    DecimalFormat decimalFormat = new DecimalFormat("############.00000000");
+                    for (int i = 0; i < geoRegion.getPartCount(); i++) {
+                        Point2Ds grPart = geoRegion.getPart(i);
+                        for (int j = 0; j < grPart.getCount(); j++) {
+                            jsonArray.add(new String[]{decimalFormat.format(grPart.getItem(j).getX()), decimalFormat.format(grPart.getItem(j).getY())});
+                        }
+                    }
+                    joFeat.element("Geometry", jsonArray);
+                    JSONObject joFields = new JSONObject();
+                    Object[] field_values = rs.getValues();
+                    FieldInfos field_names = rs.getFieldInfos();
+                    for (int i = 0; i < field_names.getCount(); i++) {
+                        joFields.element(field_names.get(i).getName(), field_values[i]);
+                    }
+                    joFeat.element("Fields", joFields);
+                    joFeatArray.add(joFeat);
+                } else {
+                    JSONObject joFeat = new JSONObject();
+                    JSONObject joFields = new JSONObject();
+                    Object[] field_values = rs.getValues();
+                    FieldInfos field_names = rs.getFieldInfos();
+                    for (int i = 0; i < field_names.getCount(); i++) {
+                        joFields.element(field_names.get(i).getName(), field_values[i]);
+                    }
+                    joFeat.element("Fields", joFields);
+                    joFeatArray.add(joFeat);
+                }
+                rs.moveNext();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        rs.close();
+        rs.dispose();
+        return joFeatArray;
+    }
+
+    public static void RegionDecompose(List<GeoRegion> geoRegions, GeoRegion geoRegion) {
+        GeoRegion[] geoRs = geoRegion.protectedDecompose();
+        for (GeoRegion gr : geoRs) {
+            if (gr.getPartCount() == 1) {
+                geoRegions.add(gr);
+            } else {
+                RegionDecompose(geoRegions, gr);
+            }
+        }
     }
 }

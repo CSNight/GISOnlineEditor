@@ -15,10 +15,9 @@ public class QUERY_POI_Client {
 
     private ReceiveThread rec;
     private static final int MESSAGE_SIZE = 4096;//每次允许接受数据的最大长度
-
     public QUERY_POI_Client() {
         try {
-            socket = new Socket("127.0.0.1", 45678);
+            socket = new Socket("192.168.31.101", 45678);
             if (socket.isConnected()) {
                 System.out.println("连接成功");
                 rec = new ReceiveThread(socket);
@@ -47,11 +46,7 @@ public class QUERY_POI_Client {
 
     public String Stop() {
         rec.interrupt();
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new SendThread(socket, "end").start();
         return "success";
     }
 
@@ -69,7 +64,7 @@ public class QUERY_POI_Client {
         public void run() {
             super.run();
             try {
-                socket.getOutputStream().write(str.getBytes("gbk"));
+                socket.getOutputStream().write(str.getBytes("utf-8"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

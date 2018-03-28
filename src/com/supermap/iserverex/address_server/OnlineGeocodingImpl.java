@@ -56,9 +56,11 @@ public class OnlineGeocodingImpl implements OnlineGeocoding, ComponentContextAwa
         try {
             // TODO Auto-generated method stub
             JSONObject data = JSONObject.fromObject(jsonElements);
-            String ID = data.getString("ID");
+            String SERVERNAME = data.getString("SERVERNAME");
+            String DATASETNAME = data.getString("DATASETNAME");
             String ADDRESS = data.getString("ADDRESS");
-            temp = onlinegeocodingProvider.POISearch(ID, ADDRESS);
+            boolean iscontain = data.getBoolean("ISCONTAINGEO");
+            temp = onlinegeocodingProvider.POISearch(SERVERNAME, DATASETNAME, ADDRESS, iscontain);
         } catch (Exception e) {
             e.printStackTrace();
         }

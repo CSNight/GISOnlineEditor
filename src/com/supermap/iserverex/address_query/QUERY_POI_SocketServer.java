@@ -6,6 +6,7 @@ import com.supermap.iserverex.utils.GUID;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class QUERY_POI_SocketServer {
     private Map<String, ReceiveThread> receiveList = new HashMap<>();//存放已连接客户端类
-    private final static int MESSAGE_SIZE = 4096;//每次允许接受数据的最大长度
+    private final static int MESSAGE_SIZE = 1024;//每次允许接受数据的最大长度
     private int count = 0;
     private Workspace ws;
     private DatasetVector dv;
@@ -29,7 +30,8 @@ public class QUERY_POI_SocketServer {
         this.dv = dv;
         serverSocket = null;
         try {
-            serverSocket = new ServerSocket(45678);//用来监听的套接字，指定端口号
+            serverSocket = new ServerSocket();//用来监听的套接字，指定端口号
+            serverSocket.bind(new InetSocketAddress("192.168.31.101", 45678));
             while (true) {
                 Socket socket = serverSocket.accept();//监听客户端连接，阻塞线程
                 String id = GUID.getUUID();
@@ -86,7 +88,7 @@ public class QUERY_POI_SocketServer {
                         System.out.println(message);
                     } else {
                         try {
-                            new SendThread(socket, QUERY_POI_SupermapAPI.getDS(new String(b), ws, dv)).start();
+                            new SendThread(socket, QUERY_POI_BaiduAPI.getDS(new String(b), true, dv)).start();
                             count++;
                             System.out.print("\r" + count);
                         } catch (Exception e) {
