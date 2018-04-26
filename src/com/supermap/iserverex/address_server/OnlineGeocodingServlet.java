@@ -1,5 +1,6 @@
 package com.supermap.iserverex.address_server;
 
+import com.supermap.iserverex.utils.JSONUtil;
 import com.supermap.services.Interface;
 import com.supermap.services.InterfaceContext;
 import com.supermap.services.InterfaceContextAware;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 @Interface(componentTypes = {OnlineGeocoding.class}, optional = false, multiple = false)
@@ -24,13 +26,8 @@ public class OnlineGeocodingServlet extends HttpServlet implements
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        String jsoncallback = request.getParameter("jsoncallback");
         try {
-            response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-            response.setHeader("Access-Control-Allow-Methods", "POST");
             request.setCharacterEncoding("UTF-8");
             String JSON = request.getParameter("params");
             JSON = URLDecoder.decode(JSON, "UTF-8");
@@ -58,7 +55,34 @@ public class OnlineGeocodingServlet extends HttpServlet implements
             }
             PrintWriter writer = response.getWriter();
             System.out.println(ResponseStr);
-            writer.println(ResponseStr);
+            writer.println(jsoncallback + "(" +ResponseStr + ")");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+            response.setHeader("Access-Control-Allow-Methods", "POST");
+            request.setCharacterEncoding("utf-8");
+            String JSON = request.getParameter("params");
+            System.out.println(JSON);
+            JSON = URLDecoder.decode(JSON, "utf-8");
+            JSONObject data = JSONObject.fromObject(JSON);
+            String reqType = data.get("RequestType").toString();
+            String paramType = data.get("ParamsType").toString();
+            String jsonElements = data.get("Elements").toString();
+            String ResponseStr = "";
+            switch (reqType) {
+                case "POISearch":
+                    ResponseStr = onlinegeocoding.POISearch(jsonElements, paramType);
+                    break;
+            }
+            PrintWriter writer = response.getWriter();
+            System.out.println(ResponseStr);
+            writer.println(URLEncoder.encode(ResponseStr,"GBK"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

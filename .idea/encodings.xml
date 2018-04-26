@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/src/com/supermap/iserverex/address_query/QUERY_POI_Client.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/supermap/iserverex/address_query/QUERY_POI_SocketServer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/supermap/iserverex/address_query/QUERY_POI_SupermapAPI.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/supermap/iserverex/address_server/OnlineGeocodingImpl.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/supermap/iserverex/address_server/OnlineGeocodingServlet.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

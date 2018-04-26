@@ -60,7 +60,9 @@ public class OnlineGeocodingImpl implements OnlineGeocoding, ComponentContextAwa
             String DATASETNAME = data.getString("DATASETNAME");
             String ADDRESS = data.getString("ADDRESS");
             boolean iscontain = data.getBoolean("ISCONTAINGEO");
-            temp = onlinegeocodingProvider.POISearch(SERVERNAME, DATASETNAME, ADDRESS, iscontain);
+            String AK = data.containsKey("AK") ? data.getString("AK") : "";
+            String SK = data.containsKey("SK") ? data.getString("SK") : "";
+            temp = onlinegeocodingProvider.POISearch(SERVERNAME, DATASETNAME, ADDRESS, iscontain, AK, SK);
         } catch (Exception e) {
             e.printStackTrace();
         }

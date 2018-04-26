@@ -162,11 +162,11 @@ public class OnlineGeocodingProviderImpl implements OnlineGeocodingProvider,
     }
 
     @Override
-    public String POISearch(String ServerName, String DatasetName, String address, boolean isContainGeo) {
+    public String POISearch(String ServerName, String DatasetName, String address, boolean isContainGeo, String ak, String sk) {
         Workspace workspace = getWorkspace(ServerName);
         DatasetVector dv = getDatasetVector(workspace, DatasetName);
 
-        return QUERY_POI_BaiduAPI.getDS(address, isContainGeo, dv);
+        return QUERY_POI_BaiduAPI.getDS(address, isContainGeo, dv, ak, sk);
 //        QUERY_POI_Client poi_client = clients.get(ID);
 //        if (poi_client != null) {
 //            return poi_client.SendMessage(address);

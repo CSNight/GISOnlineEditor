@@ -62,15 +62,15 @@ public class QUERY_POI_BaiduAPI {
         }
     }
 
-    public static String getDS(String Address, boolean isContainGeo, DatasetVector dv) {
+    public static String getDS(String Address, boolean isContainGeo, DatasetVector dv, String ak, String sk) {
         String serviceUrl = "http://api.map.baidu.com/geocoder/v2/";
-        String ak = "ysakexdGggTdMGuuqPsw0GCKzmjkMojj";
-        String sk = "T0SCA8glum8SijitYSxy9roz5UXIjSG6";
+        String aks = ak.equals("") ? "ZeUEfsIRxiXoCKbVCCYyGtG3oATPf6hN" : ak;
+        String sks = sk.equals("") ? "ZOVLVeb09KCS4Fnu8T85QVPgtGqOSk3S" : sk;
         Map<String, String> params_map = new LinkedHashMap<>();
         params_map.put("address", Address);
-        params_map.put("ak", ak);
+        params_map.put("ak", aks);
         params_map.put("output", "json");
-        String sn = CalculateAKSN(sk, params_map);
+        String sn = CalculateAKSN(sks, params_map);
         String post = toQueryString(params_map) + "&sn=" + sn;
         String result = sendGet(serviceUrl, post);
         if (!result.equals("")) {
@@ -89,7 +89,7 @@ public class QUERY_POI_BaiduAPI {
                     xy.element("x", new_lng);
                     xy.element("y", new_lat);
                     xy.element("confidence", confidence);
-                    xy.element("relation", GetRelatedRegion(dv, isContainGeo, lonlat2mercator(lng, lat)));
+                    xy.element("relation", GetRelatedRegion(dv, isContainGeo, lonlat2mercator(new_lng, new_lat)));
                     return xy.toString();
                 }
             }
@@ -175,5 +175,8 @@ public class QUERY_POI_BaiduAPI {
                 RegionDecompose(geoRegions, gr);
             }
         }
+    }
+    public static void main(String [] args){
+        Point2D SS=lonlat2mercator(104.08105,30.601048);
     }
 }

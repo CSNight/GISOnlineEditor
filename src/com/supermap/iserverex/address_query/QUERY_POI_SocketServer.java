@@ -88,7 +88,7 @@ public class QUERY_POI_SocketServer {
                         System.out.println(message);
                     } else {
                         try {
-                            new SendThread(socket, QUERY_POI_BaiduAPI.getDS(new String(b), true, dv)).start();
+                            new SendThread(socket, QUERY_POI_BaiduAPI.getDS(new String(b), true, dv,"SDA","DSADA")).start();
                             count++;
                             System.out.print("\r" + count);
                         } catch (Exception e) {
